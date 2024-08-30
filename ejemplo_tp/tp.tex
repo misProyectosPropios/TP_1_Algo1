@@ -13,10 +13,10 @@
 \materia{Algortimo y estructura de datos}
 \grupo{Compilados}
 
-\integrante{Apellido, Nombre1}{001/01}{email1@dominio.com}
-\integrante{Apellido, Nombre2}{002/01}{email2@dominio.com}
-\integrante{Apellido, Nombre3}{003/01}{email3@dominio.com}
-\integrante{Apellido, Nombre4}{004/01}{email4@dominio.com}
+\integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
+\integrante{Francisco, Pucciarelli}{802/22}{fpucciarelli@dc.uba.ar}
+\integrante{Nacho, Nombre3}{758/24}{iberney@dc.uba.ar}
+\integrante{Juan, Nombre4}{004/01}{email4@dominio.com}
 
 % Declaramos donde van a estar las figuras
 % No es obligatorio, pero suele ser comodo
@@ -95,10 +95,26 @@ La funci\'on poblaci\'onTotal recibe una lista de ciudades donde al menos una de
 \subsection{Especificaci\'on}
 
 \begin {enumerate}
-    \item
-    \item
-    \item
-    \item
-    \item
+    %Ejercicio 1.1)
+    \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
+    
+    \end{proc}
+
+    %Ejercicio 1.2)
+    \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
+    
+    \end{proc}
+    %Ejercicio 1.3)
+    \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
+    
+    \end{proc}
+    %Ejercicio 1.4)
+    \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
+    
+    \end{proc}
+    %Ejercicio 1.5)
+    \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
+    \end{proc}
+
 \end{enumerate}
 \end{document}

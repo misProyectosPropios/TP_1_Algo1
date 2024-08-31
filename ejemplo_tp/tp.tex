@@ -78,9 +78,19 @@ La funci\'on poblaci\'onTotal recibe una lista de ciudades donde al menos una de
 50.000 habitantes) y devuelve la cantidad total de habitantes. Dada la siguiente especificaci\'on:
 
 %POner procedimiento
+\begin{proc} {poblaci\'onTotal}{\In ciudades : \TLista{Ciudad}}{\ent}
+\end{proc}
+
 
 %Poner Codigo
-
+\begin{lstlisting}
+res = 0
+i = 0
+while (i < ciudades.length) do
+    res = res + ciudades[i].habitantes 
+    i = i + 1
+endwhile
+\end{lstlisting}
 
     \begin{enumerate}
         \item Demostrar que la implementaci\'on es correcta con respecto a la especificaci\'on
@@ -97,7 +107,7 @@ La funci\'on poblaci\'onTotal recibe una lista de ciudades donde al menos una de
 \begin {enumerate}
     %Ejercicio 1.1)
     \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
-        \requiere{expresionBooleana1}
+        \requiere{\True}
 	    \asegura{expresionBooleana2}
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 

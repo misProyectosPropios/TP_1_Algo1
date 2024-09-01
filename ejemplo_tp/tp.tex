@@ -115,6 +115,7 @@ endwhile
 	    \asegura{ \\
         |res| = cantidadAparicionesMayorA50000(ciudades) \land \\
         \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000)} \\
+        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000)} \\
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
@@ -123,7 +124,10 @@ endwhile
     %Ejercicio 1.2)
     %TODO
     \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
-        \requiere{expresionBooleana1}
+        \requiere{\\
+            sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) \\
+            |menores| = |mayores| 
+        }
 	    \asegura{expresionBooleana2}
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
@@ -132,8 +136,9 @@ endwhile
     %TODO
     \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
         \requiere{\\
-            0 \leq desde < |distancias| \\
-            0 \leq hasta < |distancias| \\}
+            0 \leq desde < |distancias| \\ %Preguntar a ayudantes
+            0 \leq hasta < |distancias| \\ %Preguntar a ayudantes
+        }
 	    \asegura{ \\
             res = \true \Rightarrow \existe[unalinea]{variable}{tipo}{algo \yLuego expresion}
             \existe[unalinea]{variable}{tipo}{algo \yLuego expresion} \Rightarrow res = \true
@@ -153,8 +158,8 @@ endwhile
     %TODO
     \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
         \requiere{ \\
-            0 \leq origen < |distancias| \\
-            0 \leq destino < |distancias| \\
+            0 \leq origen < |distancias| \\  %Preguntar a ayudantes
+            0 \leq destino < |distancias| \\ %Preguntar a ayudantes
             }
 	    \asegura{expresionBooleana2}
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
@@ -165,7 +170,7 @@ endwhile
 
 
 %Respuestas del punto 2
-\subsection{Especificaci\'on}
+\subsection{correctitud del programa}
 
 \begin {enumerate}
     %TODO

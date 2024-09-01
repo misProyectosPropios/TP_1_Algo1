@@ -114,9 +114,7 @@ endwhile
         \requiere{\True} 
 	    \asegura{ \\
         |res| = cantidadAparicionesMayorA50000(ciudades) \land \\
-        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000) \land \\
-        
-        } 
+        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000)} \\
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
@@ -149,7 +147,10 @@ endwhile
     %Ejercicio 1.5)
     %TODO
     \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
-        \requiere{expresionBooleana1}
+        \requiere{ \\
+            0 \leq origen < |distancias| \\
+            0 \leq destino < |distancias| \\
+            }
 	    \asegura{expresionBooleana2}
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 

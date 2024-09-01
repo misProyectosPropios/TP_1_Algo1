@@ -111,8 +111,13 @@ endwhile
     %Ejercicio 1.1)
     %TODO
     \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
-        \requiere{\True}
-	    \asegura{expresionBooleana2}
+        \requiere{\True} 
+	    \asegura{ \\
+        |res| = cantidadAparicionesMayorA50000(ciudades) \land \\
+        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000) \land \\
+        
+        } 
+        }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
     \end{proc}

@@ -113,9 +113,7 @@ endwhile
     \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
         \requiere{\True} 
 	    \asegura{ \\
-        |res| = cantidadAparicionesMayorA50000(ciudades) \land \\
-        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000)} \\
-        \paraTodo[unalinea]{i}{Ciudad}{(i \in res) \implicaLuego (i \geq 50.000)} \\
+        \left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
@@ -140,7 +138,7 @@ endwhile
             0 \leq hasta < |distancias| \\ %Preguntar a ayudantes
         }
 	    \asegura{ \\
-          res = \true  % \existe[unalinea]{variable}{tipo}{algo \yLuego expresion}
+         % res = \true  % \existe[unalinea]{variable}{tipo}{algo \yLuego expresion}
          % \existe[unalinea]{variable}{tipo}{algo \yLuego expresion} \Rightarrow res = \true
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}

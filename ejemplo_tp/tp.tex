@@ -131,8 +131,13 @@ endwhile
     %Ejercicio 1.3)
     %TODO
     \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
-        \requiere{expresionBooleana1}
-	    \asegura{expresionBooleana2}
+        \requiere{\\
+            0 \leq desde < |distancias| \\
+            0 \leq hasta < |distancias| \\}
+	    \asegura{ \\
+            res = \true \Rightarrow \existe[unalinea]{variable}{tipo}{algo \yLuego expresion}
+            \existe[unalinea]{variable}{tipo}{algo \yLuego expresion} \Rightarrow res = \true
+        }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
     \end{proc}

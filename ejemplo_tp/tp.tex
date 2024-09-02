@@ -136,18 +136,25 @@ endwhile
     \end{proc}
     %Ejercicio 1.3)
     %TODO
-    \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
+   \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
         \requiere{\\
-            0 \leq desde < |distancias| \land 0 \leq hasta < |distancias| \land \\ %Preguntar a ayudantes
+            (0 \leq desde < |distancias|) \land (0 \leq hasta < |distancias|) \land \\ %Preguntar a ayudantes
+            (esMatrizCuadrada(distancias)) \land \\
+            (esMatrizSimetrica(disntaicas)) \\
         }
 	    \asegura{\\
-            res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()} 
+            res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, po)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
         }
-	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {\paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
-    \end{proc}
+
+        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
+        {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+
+        \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+   \end{proc}
     %Ejercicio 1.4)
     %TODO
     \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
@@ -160,13 +167,22 @@ endwhile
     %TODO
     \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
         \requiere{ \\
-            0 \leq origen < |distancias| \\  %Preguntar a ayudantes
-            0 \leq destino < |distancias| \\ %Preguntar a ayudantes
+            (0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) \land \\ %Preguntar a ayudantes
+            (esMatrizCuadrada(distancias)) \land \\
+            (esMatrizSimetrica(distancias)) \\
             }
 	    \asegura{expresionBooleana2}
-	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
-	    \pred{pred1}{parametros}{expresion} 
+
+        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
+        {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+
+        \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+        
+        \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
+        {\paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
     \end{proc}
+    
 
 \end{enumerate}
 

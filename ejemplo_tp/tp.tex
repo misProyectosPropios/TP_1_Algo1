@@ -143,11 +143,12 @@ endwhile
             (esMatrizSimetrica(disntaicas)) \\
         }
 	    \asegura{\\
-            res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, po)} 
+            res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
         }
 	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
-        {\paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
+        {(|posibleCamino > 0|) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino - 1|] = hasta) \land \\ 
+        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
@@ -171,7 +172,19 @@ endwhile
             (esMatrizCuadrada(distancias)) \land \\
             (esMatrizSimetrica(distancias)) \\
             }
-	    \asegura{expresionBooleana2}
+	    \asegura{\\
+            (\neg hayCaminoCorrecto(distancias, desde, hasta) \land res = \TLista{}) \lor \\
+            (hayCaminoCorrecto(distancias, desde, hasta) \land \\
+            (\paraTodo{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta) \implicaLuego \\ 
+            esCaminoCorrecto(res) \land distancia(res) <= distancia(i)})
+            )
+        }
+
+        \aux{distancia}{distancias:  \TLista{\TLista{\ent}}, seq: \TLista{\ent}}{\ent}
+        {\sum\limits_{k=1}^{|distancias| - 1} distancias[seq[k]][seq[k - 1]]}
+
+        \pred{hayCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, desde: \ent, hasta: \ent}
+        {\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)}}
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
@@ -180,7 +193,9 @@ endwhile
         {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
         
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
-        {\paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
+        {(|posibleCamino > 0|) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino - 1|] = hasta) \land \\ 
+        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
+
     \end{proc}
     
 

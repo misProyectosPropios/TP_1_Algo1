@@ -122,10 +122,14 @@ endwhile
     %Ejercicio 1.2)
     %TODO
     \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
-        \requiere{\\
-            sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) \\
-            |menores| = |mayores| 
+        \requiere{
+            \\
+            sinRepetidos(menoresDeCiudades) Y sinRepetidos(mayoresDeCiudades) \land \\
+            |menores| = |mayores| \land \\
+            \paraTodo[unalinea]{i}{\ent}{o \leq i < |menoresDeCiudades|  \implicaLuego |distancias[i]| = |distancias|} \\
         }
+
+        
 	    \asegura{expresionBooleana2}
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
 	    \pred{pred1}{parametros}{expresion} 
@@ -134,15 +138,15 @@ endwhile
     %TODO
     \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
         \requiere{\\
-            0 \leq desde < |distancias| \\ %Preguntar a ayudantes
-            0 \leq hasta < |distancias| \\ %Preguntar a ayudantes
+            0 \leq desde < |distancias| \land 0 \leq hasta < |distancias| \land \\ %Preguntar a ayudantes
         }
-	    \asegura{ \\
-         % res = \true  % \existe[unalinea]{variable}{tipo}{algo \yLuego expresion}
-         % \existe[unalinea]{variable}{tipo}{algo \yLuego expresion} \Rightarrow res = \true
+	    \asegura{\\
+            res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()} 
+         %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
-	    \pred{pred1}{parametros}{expresion} 
+	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
+        {\paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
     \end{proc}
     %Ejercicio 1.4)
     %TODO

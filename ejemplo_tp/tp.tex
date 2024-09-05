@@ -95,6 +95,7 @@ endwhile
     \begin{enumerate}
         \item Demostrar que la implementaci\'on es correcta con respecto a la especificaci\'on
         \item Demostrar que el valor devuelto es mayor a 50.000.
+        \IfThenElse{x=x}{1}{0}
     \end{enumerate}
 
 
@@ -113,6 +114,8 @@ endwhile
     \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
         \requiere{\True} 
 	    \asegura{ \\
+        \paraTodo[unalinea]{i}{Ciudad}{(i \in ciudades \land i_{1} \ge 50.000) \Rightarrow  (i \in res) \land \\
+        \paraTodo[unalinea]{}{}{}}
         \left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
         }
 	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
@@ -124,15 +127,25 @@ endwhile
     \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
         \requiere{
             \\
-            sinRepetidos(menoresDeCiudades) Y sinRepetidos(mayoresDeCiudades) \land \\
+            sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) \land \\
             |menores| = |mayores| \land \\
-            \paraTodo[unalinea]{i}{\ent}{o \leq i < |menoresDeCiudades|  \implicaLuego |distancias[i]| = |distancias|} \\
+            (todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(menoresDeCiudades)) \\
         }
 
         
 	    \asegura{expresionBooleana2}
-	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
-	    \pred{pred1}{parametros}{expresion} 
+
+        \aux{cantidadApariciones}{secuencia, elementoABuscar}{\ent}{ \\
+            \sum\limits_{k=0}^{|secuencia| - 1}{\IfThenElse{secuencia[k] = elementoABuscar}{1}{0}}
+            }
+
+	    \pred{sinRepetidos}{seq}{
+            \paraTodo[unalinea]{i}{\ent}{expresion}
+        } 
+
+        \pred{todosElementosPositivos}{seq}{
+            \paraTodo[unalinea]{i}{\ent}{expresion}
+        } 
     \end{proc}
     %Ejercicio 1.3)
     %TODO
@@ -140,7 +153,8 @@ endwhile
         \requiere{\\
             (0 \leq desde < |distancias|) \land (0 \leq hasta < |distancias|) \land \\ %Preguntar a ayudantes
             (esMatrizCuadrada(distancias)) \land \\
-            (esMatrizSimetrica(disntaicas)) \\
+            (esMatrizSimetrica(distancias)) \land \\
+            (todosElementosPositivos(distancias)) \\
         }
 	    \asegura{\\
             res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
@@ -155,17 +169,47 @@ endwhile
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+   
+        \pred{todosElementosPositivos}{seq}{
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
+                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego seq[i][j] \geq 0}
+            }
+        } 
    \end{proc}
     %Ejercicio 1.4)
     %TODO
     \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
-        \requiere{expresionBooleana1}
-	    \asegura{expresionBooleana2}
-	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
-	    \pred{pred1}{parametros}{expresion} 
+        \requiere{ \\
+            n > 0 \land \\ % O tiene que ser igual tambien?
+            (esMatrizCuadrada(conexion)) \land \\
+            (esMatrizSimetrica(conexion)) \land \\
+            (todosElementos\_1\_o\_0(conexion)) \\ %Pensar mas casos
+        }
+	    \asegura{ \\
+            (n = 1 \land res = conexion) \lor \\ %Que pasa si en un if then else hay dos condiciones con lo mismo?
+            (n > 1 \land \existe[unalinea]{i}{\TLista{\TLista{\TLista{\ent}}}}{|i| = n \yLuego \\ 
+                \paraTodo[unalinea]{j}{\ent}{1 \geq j < |i| \implicaLuego esMultiplicacionDe(i[j], i[j - 1])} \land res = i[|i| - 1]
+            })
+        }
+	    
+        %Hacer auxiliar que vea si una matriz es multiplicacion de otra
+	    
+        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+
+        \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+   
+        \pred{todosElementos\_1\_o\_0}{seq}{
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
+                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego (seq[i][j] = 0 \lor seq[i][j] = 1)}
+           }
+        } 
+
     \end{proc}
     %Ejercicio 1.5)
     %TODO
+    % Preguntar si A -> A es camino valido o no
     \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
         \requiere{ \\
             (0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) \land \\ %Preguntar a ayudantes
@@ -181,7 +225,7 @@ endwhile
         }
 
         \aux{distancia}{distancias:  \TLista{\TLista{\ent}}, seq: \TLista{\ent}}{\ent}
-        {\sum\limits_{k=1}^{|distancias| - 1} distancias[seq[k]][seq[k - 1]]}
+        {\sum\limits_{k=1}^{|distancias| - 1}{distancias[seq[k]][seq[k - 1]]}}
 
         \pred{hayCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, desde: \ent, hasta: \ent}
         {\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)}}
@@ -203,7 +247,7 @@ endwhile
 
 
 %Respuestas del punto 2
-\subsection{correctitud del programa}
+\subsection{Correctitud del programa}
 
 \begin {enumerate}
     %TODO

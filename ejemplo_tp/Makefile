@@ -2,7 +2,7 @@ pdf:
 	pdflatex ejemplo_tp_grupal.tex
 
 ignorando-errores:
-	pdflatex -interaction=nonstopmode ejemplo_tp_grupal.tex
+	pdflatex -interaction=nonstopmode tp.tex
 
 bibliografia:
 	pdflatex ejemplo_tp_grupal.tex

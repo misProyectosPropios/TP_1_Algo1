@@ -14,9 +14,9 @@
 \grupo{Compilados}
 
 \integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
-\integrante{Pucciarelli, Francisco}{802/22}{fpucciarelli@dc.uba.ar}
+\integrante{Pucciarelli, Francisco}{802/22}{franciscopucciarelli99@gmail.com}
 \integrante{Apellido, Nacho}{758/24}{iberney@dc.uba.ar}
-\integrante{Di Scala,Juan}{004/01}{email4@dominio.com}
+\integrante{Di Scala,Juan}{192/23}{jusnmadiscala24012003@gmail.com}
 
 % Declaramos donde van a estar las figuras
 % No es obligatorio, pero suele ser comodo
@@ -95,7 +95,6 @@ endwhile
     \begin{enumerate}
         \item Demostrar que la implementaci\'on es correcta con respecto a la especificaci\'on
         \item Demostrar que el valor devuelto es mayor a 50.000.
-        \IfThenElse{x=x}{1}{0}
     \end{enumerate}
 
 
@@ -112,15 +111,40 @@ endwhile
     %Ejercicio 1.1)
     %TODO
     \item \begin{proc}{grandesCiudades}{\In ciudades : \TLista{Ciudad}} {\TLista{Ciudad}}
-        \requiere{\True} 
+        \requiere{ \\
+			sonTodosPositivos(ciudades) \land \\
+			sinRepetidos(ciudades) \\
+		} 
 	    \asegura{ \\
-        \paraTodo[unalinea]{i}{Ciudad}{(i \in ciudades \land i_{1} \ge 50.000) \Rightarrow  (i \in res) \land \\
-        \paraTodo[unalinea]{}{}{}}
-        \left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
+			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i_{1} \geq 50.000)) \Rightarrow (i \in res) \land \\ 
+			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j_{1} \geq 50.000) \land j \in ciudades)}  
+			}
+        %\left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
         }
-	    \aux{auxiliar1}{parametros}{tipoRes}{expresion}
-	    \pred{pred1}{parametros}{expresion} 
+
+	    \pred{sonTodosPositivos}{ciudades: \TLista{Ciudad}}{
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i_{1} \geq 0}
+		}
+
+		\pred{sinRepetidos}{ciudades: \TLista{Ciudad}}{ 
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow \neg(
+				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j_{0} = i_{0}}
+			)}
+		}
     \end{proc}
+
+	%Comentarios del 1.1)
+	\fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item Una ciudad con habitantes negativos (cantidad) no tiene sentido. Si bien no rompe el res (pues no los considera), no lo tomamos como entrada válida
+				\item Tampoco tomamos como entrada válida una secuencia que tenga dos (o más) tuplas con $1^{ra}$ componente igual. Si bien en la realidad puede pasar la gran casualidad que existan 2 ciudades distitnas con mismos nombre, vamos a pedir que se distingas utilizando nombres distintos
+
+			\end{enumerate}
+
+		}
+	}
 
     %Ejercicio 1.2)
     %TODO
@@ -147,6 +171,15 @@ endwhile
             \paraTodo[unalinea]{i}{\ent}{expresion}
         } 
     \end{proc}
+
+	\fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 
+
+		}
+	}
+
     %Ejercicio 1.3)
     %TODO
    \item \begin{proc}{hayCamino}{\In distancias : \TLista{\TLista{\ent}}, \In desde: \ent, \In hasta: \ent}{\bool}
@@ -160,15 +193,16 @@ endwhile
             res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
         }
+
 	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
-        {(|posibleCamino > 0|) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino - 1|] = hasta) \land \\ 
-        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
+        {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
+        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
         \pred{todosElementosPositivos}{seq}{
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
@@ -176,10 +210,20 @@ endwhile
             }
         } 
    \end{proc}
+
+   \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 
+
+		}
+	}
+
     %Ejercicio 1.4)
     %TODO
     \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
         \requiere{ \\
+			conexion = conexion_{0}
             n > 0 \land \\ % O tiene que ser igual tambien?
             (esMatrizCuadrada(conexion)) \land \\
             (esMatrizSimetrica(conexion)) \land \\
@@ -207,24 +251,34 @@ endwhile
         } 
 
     \end{proc}
+
+	\fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 
+
+		}
+	}
+
     %Ejercicio 1.5)
     %TODO
-    % Preguntar si A -> A es camino valido o no
     \item \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{}
         \requiere{ \\
-            (0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) \land \\ %Preguntar a ayudantes
+            (0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) \land \\
             (esMatrizCuadrada(distancias)) \land \\
             (esMatrizSimetrica(distancias)) \\
             }
 	    \asegura{\\
             (\neg hayCaminoCorrecto(distancias, desde, hasta) \land res = \TLista{}) \lor \\
             (hayCaminoCorrecto(distancias, desde, hasta) \land \\
-            (\paraTodo{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta) \implicaLuego \\ 
-            esCaminoCorrecto(res) \land distancia(res) <= distancia(i)})
+            (\paraTodo[unalinea]{i}{\TLista{\ent}}{ \\
+				esCaminoCorrecto(distancias, i, desde, hasta) \land esCaminoCorrecto(distancias, res, desde, hasta)
+			\Rightarrow \\ 
+        	 distanciaTotal(distancias, res) <= distanciaTotal(distancias, i)})
             )
         }
 
-        \aux{distancia}{distancias:  \TLista{\TLista{\ent}}, seq: \TLista{\ent}}{\ent}
+        \aux{distanciaTotal}{distancias:  \TLista{\TLista{\ent}}, seq: \TLista{\ent}}{\ent}
         {\sum\limits_{k=1}^{|distancias| - 1}{distancias[seq[k]][seq[k - 1]]}}
 
         \pred{hayCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, desde: \ent, hasta: \ent}
@@ -234,14 +288,22 @@ endwhile
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
         
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
-        {(|posibleCamino > 0|) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino - 1|] = hasta) \land \\ 
-        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0) \lor (res[x] = res[x - 1]))} } 
+        {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
+        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
     \end{proc}
     
+	\fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 
+
+		}
+	}
+
 
 \end{enumerate}
 
@@ -252,6 +314,7 @@ endwhile
 \begin {enumerate}
     %TODO
     \item
+	\item
 
 \end{enumerate}
 \end{document}

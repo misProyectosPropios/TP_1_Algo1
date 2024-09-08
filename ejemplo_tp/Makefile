@@ -1,5 +1,5 @@
 pdf:
-	pdflatex ejemplo_tp_grupal.tex
+	pdflatex tp.tex
 
 ignorando-errores:
 	pdflatex -interaction=nonstopmode tp.tex

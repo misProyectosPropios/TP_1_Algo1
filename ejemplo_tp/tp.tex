@@ -196,7 +196,7 @@ endwhile
 
 	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
-        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
+        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
@@ -292,7 +292,7 @@ endwhile
         
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
-        \paraTodo{i}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
+        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
     \end{proc}
     

@@ -339,8 +339,13 @@ endwhile
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
 			 \begin{enumerate}
-				\item 
-				\item 
+				\item Las mismas ideas que en el 1.3 sobre que la matriz distancia debe ser cuadrada, simetrica y su diagonal principal debe ser 0
+				\item La secuencia que devuelve es de al menos 2 elementos, ya que debe contener el desde y el hasta la secuencia para que vayan de un camino a otro
+				\item Tambien, no se considera válido que se vaya de A hasta A, sin un camino intermedio que tenga distancia diferente de 1
+				\item Las distancias no estan relacionados con la cantidad de nodos que tenga, puede
+				tener muchos elementos y otros menos, pero tener aun asi menor distancias
+                \item La funcion auxiliar no se indefine nunca, pues empieza en 1, y luego resta - 1, por lo que 
+                el menor numero que tiene es 1 - 1, siendo 0, que es un numero valido. Ademas, si el modulo de distancias fuera 1, iria de 1 hasta 1, siendo 0 y evitando que se indefina tambien. Con el 0 ocurre tambien. Y a partir del 2, va sumando las distancias
 			\end{enumerate}
 		}
 	}

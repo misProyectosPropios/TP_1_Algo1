@@ -15,7 +15,7 @@
 
 \integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
 \integrante{Pucciarelli, Francisco}{802/22}{franciscopucciarelli99@gmail.com}
-\integrante{Apellido, Nacho}{758/24}{iberney@dc.uba.ar}
+\integrante{Berney, Ignacio}{758/24}{nachoberney@gmail.com}
 \integrante{Di Scala,Juan}{192/23}{jusnmadiscala24012003@gmail.com}
 
 % Declaramos donde van a estar las figuras
@@ -69,7 +69,8 @@
         debe devolver la lista de ciudades que conforman el camino m\'as corto entre ambas. En caso de no existir un camino,
         se debe devolver una lista vac\'ia
 
-        \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{\TLista{\ent}}\end{proc}
+        \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{\TLista{\ent}}
+        \end{proc}
     \end{enumerate}
 
 \subsection{Demostraciones de correctitud}
@@ -80,6 +81,16 @@ La funci\'on poblaci\'onTotal recibe una lista de ciudades donde al menos una de
 %TODO
 %POner procedimiento
 \begin{proc} {poblaci\'onTotal}{\In ciudades : \TLista{Ciudad}}{\ent}
+{
+    \requiere{  \\
+        \existe[unalinea]{i}{\ent}{0 \leq i < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+        \paraTodo[unalinea]{i}{\ent}{0 \leq i < |ciudades| \implicaLuego ciudades[i].habitantes \geq 0} \land \\
+        %\paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].nombre}
+        }
+    \asegura{
+        res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}
+    }
+}
 \end{proc}
 
 
@@ -115,19 +126,19 @@ endwhile
 		\requiere{sinRepetidos(ciudades)} 
 		 
 	    \asegura{ \\
-			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i_{1} \geq 50.000)) \Rightarrow (i \in res) \land \\ 
-			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j_{1} \geq 50.000) \land j \in ciudades)}  
+			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i.habitantes \geq 50.000)) \Rightarrow (i \in res) \land \\ 
+			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j.habitantes \geq 50.000) \land j \in ciudades)} 
 			}
         %\left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
         }
 
 	    \pred{sonTodosPositivos}{ciudades: \TLista{Ciudad}}{
-			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i_{1} \geq 0}
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i.habitantes \geq 0}
 		}
 
 		\pred{sinRepetidos}{ciudades: \TLista{Ciudad}}{ 
 			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow \neg(
-				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j_{0} = i_{0}}
+				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j.nombre = i.nombre}
 			)}
 		}
     \end{proc}
@@ -139,38 +150,44 @@ endwhile
 			 \begin{enumerate}
 				\item Una ciudad con habitantes negativos (cantidad) no tiene sentido. Si bien no rompe el res (pues no los considera), no lo tomamos como entrada válida
 				\item Tampoco tomamos como entrada válida una secuencia que tenga dos (o más) tuplas con $1^{ra}$ componente igual. Si bien en la realidad puede pasar la gran casualidad que existan 2 ciudades distitnas con mismos nombre, vamos a pedir que se distingas utilizando nombres distintos
-
+				
 			\end{enumerate}
 
 		}
 	}
 
     %Ejercicio 1.2)
-    %TODO
-    \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
-            \requiere{sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) }
-            \requiere{|menores| = |mayores| }
-            \requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(menoresDeCiudades))}
-        
-	    \asegura{expresionBooleana2}
+   	\item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
+		\requiere{sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) }
+		\requiere{|menoresDeCiudades| = |mayoresDeCiudades| }
+		\requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(mayoresDeCiudades))}
+		\requiere{estanContenidos(menoresDeCiudades,mayoresDeCiudades) \\ \wedge estanContenidos(mayoresDeCiudades,menoresDeCiudades)}
+		
+		\asegura{|res|=|mayoresDeCiudades|}
+		\asegura{estanContenidos(menoresDeCiudades,res)\land estanContenidos(res,menoresDeCiudades)}
+        \asegura{\existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego menoresDeCiudades[j].nombre = t.nombre \land \existe[unalinea]{k}{\ent}{0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre=t.nombre \land (t.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes)}}}
+		%\asegura{res=\True \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t.habitantes=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
+		
+		%\pred{sinRepetidos}{s: seq\langle Ciudad \rangle}{
+		%	\paraTodo[unalinea]{i,j}{\ent}{(0\leq i,j <|s|\land i\neq j)\rightarrow_{L} s[i].nombre \neq s[j].nombre}} 
+		
+		\pred{todosElementosPositivos}{s: \TLista{Ciudad}}{
+			\paraTodo[unalinea]{i}{\ent}{0\leq i<|s| \implicaLuego [i].habitantes \geq 0}
+		}
 
-        \aux{cantidadApariciones}{secuencia, elementoABuscar}{\ent}{ \\
-            \sum\limits_{k=0}^{|secuencia| - 1}{\IfThenElse{secuencia[k] = elementoABuscar}{1}{0}}
-            }
-
-	    \pred{sinRepetidos}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{expresion}
-        } 
-
-        \pred{todosElementosPositivos}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{expresion}
-        } 
-    \end{proc}
-
+		\pred{estanContenidos}{s,t: \TLista{Ciudad}} 
+        {\paraTodo[unalinea]{i}{Ciudad}{i \in s \to \existe[unalinea]{j}{Ciudad}{j \in t \land i.nombre = j.nombre}}}
+		%{(\forall v: Ciudad)(v\in s\rightarrow (\exists w:Ciudad) (w \in t \land w.nombre=v.nombre)) }
+	\end{proc}
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
+			 \begin{enumerate}
+				\item No hay repetidos entre mayores y menores, para evitar conflictos en los casos en los que no se podrían diferenciar las ciudades si se llaman igual
+				\item Por ejercicio, tiene que tener la misma cantidad de elementos la secuencia de menores y mayores
+    				\item Tiene que ser >= 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguna, al ser las cantidadaes siempre positivas
+				\item Cada ciudad que aparece en alguna secuencia, tiene que aparecer en la otra necesariamente
+   			\end{enumerate}
 
 		}
 	}
@@ -183,6 +200,7 @@ endwhile
             \requiere{(esMatrizCuadrada(distancias))  }
             \requiere{(esMatrizSimetrica(distancias))  }
             \requiere{(todosElementosPositivos(distancias)) }
+            \requiere{(es0EnDiagonalPrincipal(conexion)) }
 	    \asegura{\\
             res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
@@ -196,19 +214,33 @@ endwhile
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
+        {\paraTodo[unalinea]{i}{\ent}{esMatrizCuadrada(distancias) \yLuego 0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
         \pred{todosElementosPositivos}{seq}{
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego seq[i][j] \geq 0}
             }
-        } 
+        }
+        
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+        }
    \end{proc}
 
    \fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
+			 \begin{enumerate}
+				\item La matriz distancias tienen que ser matrices cuadradas, pues
+				asi se definia la matriz distancia en el ejercicio
+				\item La matriz distancias también tiene que ser simetrica, pues así
+				se definía en el ejercicio
+                \item Los elemenentos tienen que ser positivos, ya que las distancias no pueden ser nunca negativas
+                \item La distancia de un punto A al mismo es 0, por el ejercicio, y gracias a eso, tenemos que la diagonal principal es
+                0 
+			\end{enumerate}
 
 		}
 	}
@@ -217,15 +249,16 @@ endwhile
     %TODO
     \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
 		\requiere{conexion = conexion_{0} }
-        \requiere{n > 0 \land }
+        \requiere{n > 0 }
         \requiere{(esMatrizCuadrada(conexion)) }
         \requiere{(esMatrizSimetrica(conexion)) }
-        \requiere{(todosElementos\_1\_o\_0(conexion)) }
+        \requiere{(esMatrizCuadrada(conexion)) }
+        \requiere{(es0EnDiagonalPrincipal(conexion)) }
 
 	    \asegura{ \\
-            (n = 1 \land res = conexion) \lor \\ %Que pasa si en un if then else hay dos condiciones con lo mismo?
+            (n = 1 \land conexion = conexion_{0}) \lor \\ %Que pasa si en un if then else hay dos condiciones con lo mismo?
             (n > 1 \land \existe[unalinea]{i}{\TLista{\TLista{\TLista{\ent}}}}{|i| = n \yLuego \\ 
-                \paraTodo[unalinea]{j}{\ent}{1 \geq j < |i| \implicaLuego esMultiplicacionDe(i[j], i[j - 1])} \land res = i[|i| - 1]
+                \paraTodo[unalinea]{j}{\ent}{1 \geq j < |i| \implicaLuego esMultiplicacionDe(i[j], i[j - 1])} \land conexion = i[|i| - 1]
             })
         }
 	    
@@ -241,6 +274,12 @@ endwhile
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego (seq[i][j] = 0 \lor seq[i][j] = 1)}
            }
+        }
+
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
         } 
 
     \end{proc}
@@ -248,7 +287,11 @@ endwhile
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
+			 \begin{enumerate}
+				\item Un camino de 0 saltos no tiene sentido, pues los caminos tenian al menos 1 salto
+				\item Luego, si es de 1 salto, entonces deberia devolver la misma matriz
+				\item Si n es mayor o igual a 2, entonces elevarlo ya lo sabemos como se hace correctamente y no tenemos problemas
+			\end{enumerate}
 
 		}
 	}
@@ -260,12 +303,14 @@ endwhile
         \requiere{(0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) }
         \requiere{(esMatrizCuadrada(distancias)) }
         \requiere{(esMatrizSimetrica(distancias)) }
+        \requiere{(es0EnDiagonalPrincipal(conexion)) }
             
 	    \asegura{\\
             (\neg hayCaminoCorrecto(distancias, desde, hasta) \land res = \TLista{}) \lor \\
             (hayCaminoCorrecto(distancias, desde, hasta) \land \\
+            esCaminoCorrecto(distancias, res, desde, hasta) \land
             (\paraTodo[unalinea]{i}{\TLista{\ent}}{ \\
-				esCaminoCorrecto(distancias, i, desde, hasta) \land esCaminoCorrecto(distancias, res, desde, hasta)
+				esCaminoCorrecto(distancias, i, desde, hasta) 
 			\Rightarrow \\ 
         	 distanciaTotal(distancias, res) <= distanciaTotal(distancias, i)})
             )
@@ -278,7 +323,7 @@ endwhile
         {\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)}}
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
-        {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
@@ -286,14 +331,27 @@ endwhile
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
         \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
+        
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+        } 
 
     \end{proc}
     
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
-
+			 \begin{enumerate}
+				\item Las mismas ideas que en el 1.3 sobre que la matriz distancia debe ser cuadrada, simetrica y su diagonal principal debe ser 0
+				\item La secuencia que devuelve es de al menos 2 elementos, ya que debe contener el desde y el hasta la secuencia para que vayan de un camino a otro
+				\item Tambien, no se considera válido que se vaya de A hasta A, sin un camino intermedio que tenga distancia diferente de 1
+				\item Las distancias no estan relacionados con la cantidad de nodos que tenga, puede
+				tener muchos elementos y otros menos, pero tener aun asi menor distancias
+                \item La funcion auxiliar no se indefine nunca, pues empieza en 1, y luego resta - 1, por lo que 
+                el menor numero que tiene es 1 - 1, siendo 0, que es un numero valido. Ademas, si el modulo de distancias fuera 1, iria de 1 hasta 1, siendo 0 y evitando que se indefina tambien. Con el 0 ocurre tambien. Y a partir del 2, va sumando las distancias
+			\end{enumerate}
 		}
 	}
 
@@ -306,10 +364,146 @@ endwhile
 
 \begin {enumerate}
     %TODO
-    \item Para hacer este ejercicio, necesimos proponer un invariante, junto con saber cual es la Post-condicion
-    y la pre-condondicion. La post-condicion sabemos que es $res = \sum\limits_{i=0}^{|ciudades| - 1}{ciudades[i].habitantes}$ 
-    porque no hay mas instrucciones despues del ciclo.
-	\item
+    \item
+	
+    Para este ciclo, proponemos como invariante a: $0 \leq i \leq |ciudades| \yLuego$
 
+    \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item 
+
+    Para probar que el programa satisface la especificación, debo probar la tripla de hayCaminoCorrecto
+
+    {P} S {Q}
+
+    Siendo 
+    \begin{itemize}
+        \item $P = Escribir choclo del requiere$
+        \item $Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
+    \end{itemize}
+    
+    Y para probar la tripla de Hoare, debo hacer
+
+    $$P \rightarrow wp(S1,S2,S3,S4, Q)$$
+
+    O, usando los axiomas 
+
+    $$P \rightarrow wp(S1; wp(S2; wp(S3; wp(S4, Q))))$$
+
+    Siendo 
+    \begin{itemize}
+        \item $S1 = i := 0$
+        \item $S2 = res := 0$
+        \item $S3 = ciclo$ $while$
+        \item $S4 = skip$
+    \end{itemize}
+    
+    Vamos a ir de atras para adelante
+
+    $wp (skip, Q) = Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
+
+    Al finalizar el ciclo, finaliza el programa. Por lo tanto, debe pasar que $Q_{c} \rightarrow Q$
+    Proponemos tomar como $Q_{c} = Q$, que respeta $Q_{c} \rightarrow Q $
+    
+    $wp(S3, Q_{c})$
+
+    Ahora necesitamos buscar un invariante. A partir del teorema del invariante sabemos que 
+
+    \begin{itemize}
+        \item $P_{c} \rightarrow I$
+        \item $ \{I \land B \}$  $S_{c}$  $\{I\}$
+        \item $(I \land \neg B) \rightarrow Q_{c} $
+    \end{itemize}
+    
+    Nos enfocamos en el tercero:
+
+    $ (I \land \neg B) \rightarrow Q_{c} $
+
+    Tenemos como datos a $B$ y a $Q_{c}$ (el que propusimos antes)
+
+    Ahora, a partir de esto y un poco de imaginación, podemos proponer el invariante
+
+    $$ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$$
+
+    Observando el código pre-ciclo y que $P_{c} \rightarrow I $, proponemos como $P_{c}$ a
+
+    $$i=0 \land res = 0$$
+
+    Aca ponemos la verificacion de correctitud del ciclo
+
+    \begin{itemize}
+        \item $(i = 0 \land res = 0) \rightarrow 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+        
+        Es verdadero, pues, al reemplazar i por 0 en el 2do queda: $0 \leq 0 \leq |ciudades|$. Al ser $|ciudades| \geq 0$
+        Y el $0 = \sum\limits_{k=0}^{0 - 1}{ciudades[i].habitantes}$ que es verdadero
+
+        \item $\{I \land B\}$  S $\{I\} \equiv \{I \land B\} \rightarrow wp(s,i)$
+        \\
+        \\
+        Calculo Auxiliar \\
+         ${I \land B } \equiv {0 \leq i < |ciudades|\land res=\sum ciudades[j].habitantes}$ \\
+         $wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$ \\
+         $wp_{1}(i=i+1,I) \equiv def(i+1) \land_{L}I_{i+1}  $ \\
+         $\equiv 0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i + 1 - 1}{ciudades[k].habitantes} $ \\
+         $ \equiv 0 \leq i + 1 \leq |ciudades|  \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}$ 
+
+         Vuevlo a \\
+         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$
+         \\
+         \\ 
+         Y lo reemplazamos \\
+         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes, 0 \leq i \leq |ciudades|\land res=\sum ciudades[j].habitantes$ \\
+
+         $ \equiv def (res + ciudades[i].habitantes) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$
+
+         $ \equiv ((def(res) \land def(ciudades[i].habitantes) \land def(i)) \yLuego 0 \leq i < |ciudades|) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$ \\
+
+        $ \equiv (0 \leq i z |ciudades| \yLuego (o \leq i + 1 \leq |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{j=0}^{i}{ciudades[j].habitantes}))$
+
+        $ \equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes} \\\text{(A la sumatoria le sacamos restamos el ultimo termino)}$ 
+
+        Al final: 
+
+        $ wp(S, I) \equiv \{ o \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes}\}$
+
+        qye es exactamente igual a \{ $I \land B$\}. Por lo tanto podemos afirmar que $\{I \land B\} \rightarrow$ wp(S,I)
+    y que vale la tripla de Hoare
+        
+        \item
+            $ (I \land \neg B) \to Q_{c}$    \\
+            $ I \land \neg B \equiv 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i \leq |ciudades| $ \\
+            $ I \land \neg B \equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
+
+            Que es exactamente la misma formula que $Q_{c}$, por lo tanto la implicación vale.
+
+            Como valen los 3 requerimientos del Teorema del Invariante, podemos afirmar que el programa es 
+            parcialmente correcto respecto a su
+
+            Invairante
+     $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+        \end{itemize}
+    
+
+
+
+
+				\item 
+			\end{enumerate}
+		}
+	}
+    
+    \item
+
+    \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
+		}
+	}
 \end{enumerate}
 \end{document}

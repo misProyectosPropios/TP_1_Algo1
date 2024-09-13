@@ -15,7 +15,7 @@
 
 \integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
 \integrante{Pucciarelli, Francisco}{802/22}{franciscopucciarelli99@gmail.com}
-\integrante{Apellido, Nacho}{758/24}{iberney@dc.uba.ar}
+\integrante{Berney, Ignacio}{758/24}{nachoberney@gmail.com}
 \integrante{Di Scala,Juan}{192/23}{jusnmadiscala24012003@gmail.com}
 
 % Declaramos donde van a estar las figuras
@@ -157,27 +157,25 @@ endwhile
 	}
 
     %Ejercicio 1.2)
-    %TODO
-    \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
+   \item \begin{proc}{sumaDeHabitantes}{\In menoresDeCiudades : \TLista{Ciudad}, \In mayoresDeCiudades : \TLista{Ciudad}}{\TLista{Ciudad}}
             \requiere{sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) }
-            \requiere{|menores| = |mayores| }
-            \requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(menoresDeCiudades))}
+            \requiere{|menoresDeCiudades| = |mayoresDeCiudades| }
+            \requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(mayoresDeCiudades))}
+            \requiere{estanContenidos(menoresDeCiudades,mayoresDeCiudades) \\ \wedge estanContenidos(mayoresDeCiudades,menoresDeCiudades)}
         
-	    \asegura{expresionBooleana2}
+	    \asegura{|res|=|n|}
+	    \asegura{estanContenidos(menoresDeCiudades,res)\land estanContenidos(res,menoresDeCiudades)}
+	    \asegura{t\in res \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t_{1}=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
 
-        \aux{cantidadApariciones}{secuencia, elementoABuscar}{\ent}{ \\
-            \sum\limits_{k=0}^{|secuencia| - 1}{\IfThenElse{secuencia[k] = elementoABuscar}{1}{0}}
-            }
+	    \pred{sinRepetidos}{s: seq\langle Ciudad \rangle}{
+            \paraTodo[unalinea]{i,j}{\ent}{(0\leq i,j <|s|\land i\neq j)\rightarrow_{L} s[i].nombre \neq s[j].nombre}} 
 
-	    \pred{sinRepetidos}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{expresion}
-        } 
-
-        \pred{todosElementosPositivos}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{expresion}
-        } 
+       \hangindent \pred{todosElementosPositivos}{s: seq\langle Ciudad \rangle}{
+            \paraTodo[unalinea]{i}{\ent}{0\leq i<|s|\rightarrow_{L}s[i].habitantes \geq 0}
+        }
+        \pred{estanContenidos}{s,t: seq\langle Ciudad \rangle} 
+        {(\forall v: Ciudad)(v\in s\rightarrow (\exists w:Ciudad) (w \in t \land w.nombre=v.nombre)) }
     \end{proc}
-
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\

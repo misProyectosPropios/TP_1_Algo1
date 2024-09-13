@@ -15,7 +15,7 @@
 
 \integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
 \integrante{Pucciarelli, Francisco}{802/22}{franciscopucciarelli99@gmail.com}
-\integrante{Berney, Ignacio}{758/24}{nachoberney@gmail.com}
+\integrante{Apellido, Nacho}{758/24}{iberney@dc.uba.ar}
 \integrante{Di Scala,Juan}{192/23}{jusnmadiscala24012003@gmail.com}
 
 % Declaramos donde van a estar las figuras
@@ -69,7 +69,8 @@
         debe devolver la lista de ciudades que conforman el camino m\'as corto entre ambas. En caso de no existir un camino,
         se debe devolver una lista vac\'ia
 
-        \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{\TLista{\ent}}\end{proc}
+        \begin{proc}{caminoM\'inimo}{\In origen : \ent, \In destino : \ent, \In distancias: \TLista{\TLista{\ent}}}{\TLista{\ent}}
+        \end{proc}
     \end{enumerate}
 
 \subsection{Demostraciones de correctitud}
@@ -80,6 +81,16 @@ La funci\'on poblaci\'onTotal recibe una lista de ciudades donde al menos una de
 %TODO
 %POner procedimiento
 \begin{proc} {poblaci\'onTotal}{\In ciudades : \TLista{Ciudad}}{\ent}
+{
+    \requiere{  \\
+        \existe[unalinea]{i}{\ent}{0 \leq i < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+        \paraTodo[unalinea]{i}{\ent}{0 \leq i < |ciudades| \implicaLuego ciudades[i].habitantes \geq 0} \land \\
+        \paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].nombre}
+        }
+    \asegura{
+        res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}
+    }
+}
 \end{proc}
 
 

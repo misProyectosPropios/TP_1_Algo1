@@ -531,6 +531,12 @@ endwhile
                 0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades|
             \end{align*}
             \text{Y como i esta entre 0 y el modulo de ciudades y -1, entonces es correcto este punto}
+
+            Ahora, nos falta probar el otro requerimiento para poder decir que el ciclo termina
+        \item $ I \land f_{v} \leq 0 \to \neg B$
+            
+            $$  0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| - i \leq 0 \to i \geq |ciudades|$$
+
         \end{itemize}
 
 

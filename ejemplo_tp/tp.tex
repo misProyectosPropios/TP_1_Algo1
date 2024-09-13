@@ -181,7 +181,10 @@ endwhile
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
 
 		}
 	}
@@ -207,13 +210,19 @@ endwhile
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
+        {\paraTodo[unalinea]{i}{\ent}{esMatrizCuadrada(distancias) \yLuego 0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
         \pred{todosElementosPositivos}{seq}{
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego seq[i][j] \geq 0}
             }
-        } 
+        }
+        
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+        }
    \end{proc}
 
    \fbox{
@@ -252,6 +261,12 @@ endwhile
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego (seq[i][j] = 0 \lor seq[i][j] = 1)}
            }
+        }
+
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
         } 
 
     \end{proc}
@@ -259,7 +274,10 @@ endwhile
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
 
 		}
 	}
@@ -298,13 +316,20 @@ endwhile
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
         \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLissta{\ent}}}
+        {
+            esMatrizCuadrada(distancias)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+        }
     \end{proc}
     
 	\fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 
-
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
 		}
 	}
 
@@ -318,7 +343,27 @@ endwhile
 \begin {enumerate}
     %TODO
     \item
-	\item
+	
+    \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
+		}
+	}
+    
+    \item
 
+    \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item 
+				\item 
+			\end{enumerate}
+		}
+	}
 \end{enumerate}
 \end{document}

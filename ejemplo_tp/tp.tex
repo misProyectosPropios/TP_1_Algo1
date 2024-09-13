@@ -126,19 +126,19 @@ endwhile
 		\requiere{sinRepetidos(ciudades)} 
 		 
 	    \asegura{ \\
-			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i_{1} \geq 50.000)) \Rightarrow (i \in res) \land \\ 
-			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j_{1} \geq 50.000) \land j \in ciudades)}  
+			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i.habitantes \geq 50.000)) \Rightarrow (i \in res) \land \\ 
+			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j.habitantes \geq 50.000) \land j \in ciudades)} 
 			}
         %\left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
         }
 
 	    \pred{sonTodosPositivos}{ciudades: \TLista{Ciudad}}{
-			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i_{1} \geq 0}
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i.habitantes \geq 0}
 		}
 
 		\pred{sinRepetidos}{ciudades: \TLista{Ciudad}}{ 
 			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow \neg(
-				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j_{0} = i_{0}}
+				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j.nombre = i.nombre}
 			)}
 		}
     \end{proc}
@@ -197,6 +197,7 @@ endwhile
             \requiere{(esMatrizCuadrada(distancias))  }
             \requiere{(esMatrizSimetrica(distancias))  }
             \requiere{(todosElementosPositivos(distancias)) }
+            \requiere{(es0EnDiagonalPrincipal(conexion)) }
 	    \asegura{\\
             res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
@@ -240,7 +241,8 @@ endwhile
         \requiere{n > 0 }
         \requiere{(esMatrizCuadrada(conexion)) }
         \requiere{(esMatrizSimetrica(conexion)) }
-        \requiere{(todosElementos\_1\_o\_0(conexion)) }
+        \requiere{(esMatrizCuadrada(conexion)) }
+        \requiere{(es0EnDiagonalPrincipal(conexion)) }
 
 	    \asegura{ \\
             (n = 1 \land conexion = conexion_{0}) \lor \\ %Que pasa si en un if then else hay dos condiciones con lo mismo?
@@ -290,12 +292,14 @@ endwhile
         \requiere{(0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) }
         \requiere{(esMatrizCuadrada(distancias)) }
         \requiere{(esMatrizSimetrica(distancias)) }
+        \requiere{(es0EnDiagonalPrincipal(conexion)) }
             
 	    \asegura{\\
             (\neg hayCaminoCorrecto(distancias, desde, hasta) \land res = \TLista{}) \lor \\
             (hayCaminoCorrecto(distancias, desde, hasta) \land \\
+            esCaminoCorrecto(distancias, res, desde, hasta) \land
             (\paraTodo[unalinea]{i}{\TLista{\ent}}{ \\
-				esCaminoCorrecto(distancias, i, desde, hasta) \land esCaminoCorrecto(distancias, res, desde, hasta)
+				esCaminoCorrecto(distancias, i, desde, hasta) 
 			\Rightarrow \\ 
         	 distanciaTotal(distancias, res) <= distanciaTotal(distancias, i)})
             )
@@ -346,6 +350,8 @@ endwhile
     %TODO
     \item
 	
+    Para este ciclo, proponemos como invariante a: $0 \leq i \leq |ciudades| \yLuego$
+
     \fbox{
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\

@@ -485,7 +485,7 @@ endwhile
 
     \begin{itemize}
         \item $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$  
-        \item $ I \land f_{v} \leq 0 \to B$
+        \item $ I \land f_{v} \leq 0 \to \neg B$
     \end{itemize}
 
     Vamos a probarlo:
@@ -493,7 +493,46 @@ endwhile
     \begin{itemize}
         \item 
             $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
-    \end{itemize}
+
+            Teniendo en cuenta esto: 
+            \begin{itemize}
+                \item Invariante  $\equiv 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+                \item B $ \equiv i < |ciudades|$
+                \item Funcion variante (que proponemos): $|ciudades| - i$
+            \end{itemize}
+
+            Veamos: 
+
+            $0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0})$
+    
+    
+            Calculemos la $wp(res := res + ciudades[i].habitantes; i := i + 1, |ciudades| - i < v_{0})$
+            \begin{align*}
+                \equiv &wp(res := res + ciudades[i].habitantes, wp(i := i + 1, |ciudades| - i < v_{0})) \\
+                \equiv &wp(res := res + ciudades[i].habitantes, def (i + 1) \yLuego |ciudades| - (i + 1) < v_{0}) \\
+                \equiv &wp(res := res + ciudades[i].habitantes, |ciudades| - (i + 1) < v_{0}) \\
+                \equiv &def(res + ciudades[i].habitantes) \yLuego |ciudades| - (i + 1) < v_{0} \\
+                \equiv &def(res) \land def(ciudades) \land def(i) \yLuego 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0} \\
+                \equiv &0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0}
+            \end{align*}
+
+
+            Ya tenemos cual es la wp, ahora probemos que la implicacion es correcta
+           $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0}) $
+
+        Nos parece que el res no nos hara falta, por lo que lo sacamos
+
+            \begin{align*}
+                0& \leq i \leq |ciudades| \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0}) \\
+                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0} \\
+                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < |ciudades| - i \\
+                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego - 1 < 0 \\
+                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego \True\\
+                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades|
+            \end{align*}
+            \text{Y como i esta entre 0 y el modulo de ciudades y -1, entonces es correcto este punto}
+        \end{itemize}
+
 
 
 

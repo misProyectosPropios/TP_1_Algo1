@@ -237,7 +237,7 @@ endwhile
     %TODO
     \item \begin{proc}{cantidadCaminosNSaltos}{\Inout conexion : \TLista{\TLista{\ent}}, \In n : \ent}{}
 		\requiere{conexion = conexion_{0} }
-        \requiere{n > 0}
+        \requiere{n > 0 }
         \requiere{(esMatrizCuadrada(conexion)) }
         \requiere{(esMatrizSimetrica(conexion)) }
         \requiere{(todosElementos\_1\_o\_0(conexion)) }
@@ -315,12 +315,13 @@ endwhile
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
         \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
-
-        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLissta{\ent}}}
+        
+        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
         {
             esMatrizCuadrada(distancias)  \yLuego \\
             \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
-        }
+        } 
+
     \end{proc}
     
 	\fbox{

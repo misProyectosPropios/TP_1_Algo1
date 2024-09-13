@@ -535,8 +535,16 @@ endwhile
             Ahora, nos falta probar el otro requerimiento para poder decir que el ciclo termina
         \item $ I \land f_{v} \leq 0 \to \neg B$
             
-            $$  0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| - i \leq 0 \to i \geq |ciudades|$$
+        \begin{align*}
+            0 \leq &i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| - i \leq 0 \to i \geq |ciudades| \\
+            0 \leq &i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| \leq i \to i \geq |ciudades| \\
+            &i = |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \to i \geq |ciudades|  \\
+            &i = |ciudades| \to i \geq |ciudades|
+        \end{align*}
+            Que es verdadero /TODO Poner una mejor idea
 
+
+        Y como ambos son verdaderos, entonces termina el ciclo, terminando la demostracion de que el ciclo es correcto con respecto a su especificación
         \end{itemize}
 
 

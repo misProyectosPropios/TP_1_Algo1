@@ -150,7 +150,7 @@ endwhile
 			 \begin{enumerate}
 				\item Una ciudad con habitantes negativos (cantidad) no tiene sentido. Si bien no rompe el res (pues no los considera), no lo tomamos como entrada válida
 				\item Tampoco tomamos como entrada válida una secuencia que tenga dos (o más) tuplas con $1^{ra}$ componente igual. Si bien en la realidad puede pasar la gran casualidad que existan 2 ciudades distitnas con mismos nombre, vamos a pedir que se distingas utilizando nombres distintos
-
+				
 			\end{enumerate}
 
 		}
@@ -163,9 +163,9 @@ endwhile
 		\requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(mayoresDeCiudades))}
 		\requiere{estanContenidos(menoresDeCiudades,mayoresDeCiudades) \\ \wedge estanContenidos(mayoresDeCiudades,menoresDeCiudades)}
 		
-		\asegura{|res|=|n|}
+		\asegura{|res|=|mayoresDeCiudades|}
 		\asegura{estanContenidos(menoresDeCiudades,res)\land estanContenidos(res,menoresDeCiudades)}
-		\asegura{t\in res \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t_{1}=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
+		\asegura{res=\true \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t.habitantes=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
 		
 		\pred{sinRepetidos}{s: seq\langle Ciudad \rangle}{
 			\paraTodo[unalinea]{i,j}{\ent}{(0\leq i,j <|s|\land i\neq j)\rightarrow_{L} s[i].nombre \neq s[j].nombre}} 
@@ -180,9 +180,11 @@ endwhile
 		\parbox[b]{\linewidth}{
 			 \textbf{\underline{\emph{Comentarios:}}} \\
 			 \begin{enumerate}
-				\item 
-				\item 
-			\end{enumerate}
+				\item No hay repetidos entre mayores y menores, para evitar conflictos en los casos en los que no se podrían diferenciar las ciudades si se llaman igual
+				\item Por ejercicio, tiene que tener la misma cantidad de elementos la secuencia de menores y mayores
+    				\item Tiene que ser >= 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguna, al ser las cantidadaes siempre positivas
+				\item Cada ciudad que aparece en alguna secuencia, tiene que aparecer en la otra necesariamente
+   			\end{enumerate}
 
 		}
 	}

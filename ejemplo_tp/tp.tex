@@ -168,8 +168,10 @@ endwhile
         \asegura{\existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego menoresDeCiudades[j].nombre = t.nombre \land \existe[unalinea]{k}{\ent}{0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre=t.nombre \land (t.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes)}}}
 		%\asegura{res=\True \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t.habitantes=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
 		
-		%\pred{sinRepetidos}{s: seq\langle Ciudad \rangle}{
-		%	\paraTodo[unalinea]{i,j}{\ent}{(0\leq i,j <|s|\land i\neq j)\rightarrow_{L} s[i].nombre \neq s[j].nombre}} 
+
+        \pred{sinRepetidos}{s: \TLista{Ciudad}}{
+            \paraTodo[unalinea]{i,j}{\ent}{0 \leq i < j < |s| \land i \neq j \implicaLuego s[i].nombre \neq s[j].nombre}
+        }
 		
 		\pred{todosElementosPositivos}{s: \TLista{Ciudad}}{
 			\paraTodo[unalinea]{i}{\ent}{0\leq i<|s| \implicaLuego [i].habitantes \geq 0}
@@ -368,15 +370,9 @@ endwhile
 	
     Para este ciclo, proponemos como invariante a: $0 \leq i \leq |ciudades| \yLuego$
 
-    \fbox{
-		\parbox[b]{\linewidth}{
-			 \textbf{\underline{\emph{Comentarios:}}} \\
-			 \begin{enumerate}
-				\item 
-
     Para probar que el programa satisface la especificación, debo probar la tripla de hayCaminoCorrecto
 
-    {P} S {Q}
+    \{P\} S \{Q\}
 
     Siendo 
     \begin{itemize}
@@ -442,7 +438,8 @@ endwhile
         \item $\{I \land B\}$  S $\{I\} \equiv \{I \land B\} \rightarrow wp(s,i)$
         \\
         \\
-        Calculo Auxiliar \\
+        Calculo Auxiliar \\ 
+        \\
          ${I \land B } \equiv {0 \leq i < |ciudades|\land res=\sum ciudades[j].habitantes}$ \\
          $wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$ \\
          $wp_{1}(i=i+1,I) \equiv def(i+1) \land_{L}I_{i+1}  $ \\
@@ -460,7 +457,7 @@ endwhile
 
          $ \equiv ((def(res) \land def(ciudades[i].habitantes) \land def(i)) \yLuego 0 \leq i < |ciudades|) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$ \\
 
-        $ \equiv (0 \leq i z |ciudades| \yLuego (o \leq i + 1 \leq |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{j=0}^{i}{ciudades[j].habitantes}))$
+        $ \equiv (0 \leq i < |ciudades| \yLuego (o \leq i + 1 \leq |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{j=0}^{i}{ciudades[j].habitantes}))$
 
         $ \equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes} \\\text{(A la sumatoria le sacamos restamos el ultimo termino)}$ 
 
@@ -468,7 +465,7 @@ endwhile
 
         $ wp(S, I) \equiv \{ o \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes}\}$
 
-        qye es exactamente igual a \{ $I \land B$\}. Por lo tanto podemos afirmar que $\{I \land B\} \rightarrow$ wp(S,I)
+        que es exactamente igual a \{ $I \land B$\}. Por lo tanto podemos afirmar que $\{I \land B\} \rightarrow$ wp(S,I)
     y que vale la tripla de Hoare
         
         \item
@@ -481,9 +478,32 @@ endwhile
             Como valen los 3 requerimientos del Teorema del Invariante, podemos afirmar que el programa es 
             parcialmente correcto respecto a su
 
-            Invairante
-     $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+    
+%     $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
         \end{itemize}
+    Ahora para probar que el ciclo termina, tenemos que probar:
+
+    \begin{itemize}
+        \item $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$  
+        \item $ I \land f_{v} \leq 0 \to B$
+    \end{itemize}
+
+    Vamos a probarlo:
+
+    \begin{itemize}
+        \item 
+            $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
+    \end{itemize}
+
+
+
+    \fbox{
+		\parbox[b]{\linewidth}{
+			 \textbf{\underline{\emph{Comentarios:}}} \\
+			 \begin{enumerate}
+				\item 
+
+    
     
 
 

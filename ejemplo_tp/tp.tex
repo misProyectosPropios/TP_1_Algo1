@@ -370,6 +370,122 @@ endwhile
 			 \textbf{\underline{\emph{Comentarios:}}} \\
 			 \begin{enumerate}
 				\item 
+
+    Para probar que el programa satisface la especificación, debo probar la tripla de hayCaminoCorrecto
+
+    {P} S {Q}
+
+    Siendo 
+    \begin{itemize}
+        \item $P = Escribir choclo del requiere$
+        \item $Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
+    \end{itemize}
+    
+    Y para probar la tripla de Hoare, debo hacer
+
+    $$P \rightarrow wp(S1,S2,S3,S4, Q)$$
+
+    O, usando los axiomas 
+
+    $$P \rightarrow wp(S1; wp(S2; wp(S3; wp(S4, Q))))$$
+
+    Siendo 
+    \begin{itemize}
+        \item $S1 = i := 0$
+        \item $S2 = res := 0$
+        \item $S3 = ciclo$ $while$
+        \item $S4 = skip$
+    \end{itemize}
+    
+    Vamos a ir de atras para adelante
+
+    $wp (skip, Q) = Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
+
+    Al finalizar el ciclo, finaliza el programa. Por lo tanto, debe pasar que $Q_{c} \rightarrow Q$
+    Proponemos tomar como $Q_{c} = Q$, que respeta $Q_{c} \rightarrow Q $
+    
+    $wp(S3, Q_{c})$
+
+    Ahora necesitamos buscar un invariante. A partir del teorema del invariante sabemos que 
+
+    \begin{itemize}
+        \item $P_{c} \rightarrow I$
+        \item $ \{I \land B \}$  $S_{c}$  $\{I\}$
+        \item $(I \land \neg B) \rightarrow Q_{c} $
+    \end{itemize}
+    
+    Nos enfocamos en el tercero:
+
+    $ (I \land \neg B) \rightarrow Q_{c} $
+
+    Tenemos como datos a $B$ y a $Q_{c}$ (el que propusimos antes)
+
+    Ahora, a partir de esto y un poco de imaginación, podemos proponer el invariante
+
+    $$ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$$
+
+    Observando el código pre-ciclo y que $P_{c} \rightarrow I $, proponemos como $P_{c}$ a
+
+    $$i=0 \land res = 0$$
+
+    Aca ponemos la verificacion de correctitud del ciclo
+
+    \begin{itemize}
+        \item $(i = 0 \land res = 0) \rightarrow 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+        
+        Es verdadero, pues, al reemplazar i por 0 en el 2do queda: $0 \leq 0 \leq |ciudades|$. Al ser $|ciudades| \geq 0$
+        Y el $0 = \sum\limits_{k=0}^{0 - 1}{ciudades[i].habitantes}$ que es verdadero
+
+        \item $\{I \land B\}$  S $\{I\} \equiv \{I \land B\} \rightarrow wp(s,i)$
+        \\
+        \\
+        Calculo Auxiliar \\
+         ${I \land B } \equiv {0 \leq i < |ciudades|\land res=\sum ciudades[j].habitantes}$ \\
+         $wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$ \\
+         $wp_{1}(i=i+1,I) \equiv def(i+1) \land_{L}I_{i+1}  $ \\
+         $\equiv 0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i + 1 - 1}{ciudades[k].habitantes} $ \\
+         $ \equiv 0 \leq i + 1 \leq |ciudades|  \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}$ 
+
+         Vuevlo a \\
+         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$
+         \\
+         \\ 
+         Y lo reemplazamos \\
+         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes, 0 \leq i \leq |ciudades|\land res=\sum ciudades[j].habitantes$ \\
+
+         $ \equiv def (res + ciudades[i].habitantes) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$
+
+         $ \equiv ((def(res) \land def(ciudades[i].habitantes) \land def(i)) \yLuego 0 \leq i < |ciudades|) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$ \\
+
+        $ \equiv (0 \leq i z |ciudades| \yLuego (o \leq i + 1 \leq |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{j=0}^{i}{ciudades[j].habitantes}))$
+
+        $ \equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes} \\\text{(A la sumatoria le sacamos restamos el ultimo termino)}$ 
+
+        Al final: 
+
+        $ wp(S, I) \equiv \{ o \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes}\}$
+
+        qye es exactamente igual a \{ $I \land B$\}. Por lo tanto podemos afirmar que $\{I \land B\} \rightarrow$ wp(S,I)
+    y que vale la tripla de Hoare
+        
+        \item
+            $ (I \land \neg B) \to Q_{c}$    \\
+            $ I \land \neg B \equiv 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i \leq |ciudades| $ \\
+            $ I \land \neg B \equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
+
+            Que es exactamente la misma formula que $Q_{c}$, por lo tanto la implicación vale.
+
+            Como valen los 3 requerimientos del Teorema del Invariante, podemos afirmar que el programa es 
+            parcialmente correcto respecto a su
+
+            Invairante
+     $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+        \end{itemize}
+    
+
+
+
+
 				\item 
 			\end{enumerate}
 		}

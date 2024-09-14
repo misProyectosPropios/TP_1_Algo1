@@ -215,7 +215,8 @@ endwhile
         {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{esMatrizCuadrada(distancias) \yLuego 0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
+        {esMatrizCuadrada(matriz) \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
         \pred{todosElementosPositivos}{seq}{
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
@@ -269,7 +270,8 @@ endwhile
         {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+        {esMatrizCuadrada(matriz) \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
    
         \pred{todosElementos\_1\_o\_0}{seq}{
             \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
@@ -327,7 +329,8 @@ endwhile
         {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
+        {esMatrizCuadrada(matriz) \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
         
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 

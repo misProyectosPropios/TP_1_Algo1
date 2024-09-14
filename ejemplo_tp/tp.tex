@@ -367,28 +367,30 @@ endwhile
 \begin {enumerate}
     %TODO
     \item
-	
-    Para este ciclo, proponemos como invariante a: $0 \leq i \leq |ciudades| \yLuego$
 
     Para probar que el programa satisface la especificación, debo probar la tripla de hayCaminoCorrecto
 
     \{P\} S \{Q\}
 
-    Siendo 
+    donde  
     \begin{itemize}
-        \item $P = Escribir choclo del requiere$
-        \item $Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
+        \item $P = \{ \\
+            \existe[unalinea]{i}{\ent}{0 \leq i < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |ciudades| \implicaLuego ciudades[i].habitantes \geq 0} \land \\
+            \paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].habitantes} 
+        \}$
+        \item $Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[k].habitantes}$
     \end{itemize}
     
-    Y para probar la tripla de Hoare, debo hacer
+    Para ello, operamos de la siguiente manera
 
-    $$P \rightarrow wp(S1,S2,S3,S4, Q)$$
+    $$P \to wp(S1,S2,S3,S4, Q)$$
 
     O, usando los axiomas 
 
     $$P \rightarrow wp(S1; wp(S2; wp(S3; wp(S4, Q))))$$
 
-    Siendo 
+    donde  
     \begin{itemize}
         \item $S1 = i := 0$
         \item $S2 = res := 0$
@@ -396,91 +398,106 @@ endwhile
         \item $S4 = skip$
     \end{itemize}
     
-    Vamos a ir de atras para adelante
+    Vayamos de atrás para adelante y por partes
 
-    $wp (skip, Q) = Q = res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[i].habitantes}$
-
-    Al finalizar el ciclo, finaliza el programa. Por lo tanto, debe pasar que $Q_{c} \rightarrow Q$
-    Proponemos tomar como $Q_{c} = Q$, que respeta $Q_{c} \rightarrow Q $
+    1. $wp (skip, Q)$ 
     
-    $wp(S3, Q_{c})$
+    Por axioma 2, $wp(skip, Q) \equiv Q \equiv res =  \sum\limits_{k=0}^{|secuencia| - 1}{ciudades[k].habitantes}$
 
-    Ahora necesitamos buscar un invariante. A partir del teorema del invariante sabemos que 
+    Para seguir avanzando, necesitamos relacionar la wp (calculada antes) con el $Q_{c}$ del ciclo. Debemos encontrar un $Q_{c}$ que cumpla
+    $Q_{c} \to Q$. Proponemos tomar $Q_{c}=Q$, que respeta la implicación planteada
+
+    2. $wp(S3, Q_{c})$
+
+    LLegada esta parte, necesitamos ver qeu el ciclo while sea correcto. Esto implica mostrar que valen tanto el Teorema del Invariante como el 
+    Teorema de Terminación
+
+    \underline{Teorema del invariante}
+
+    Partimos de 
 
     \begin{itemize}
-        \item $P_{c} \rightarrow I$
-        \item $ \{I \land B \}$  $S_{c}$  $\{I\}$
-        \item $(I \land \neg B) \rightarrow Q_{c} $
+        \item $B = \{i < |ciudades| \}$
+        \item $res =  \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
     \end{itemize}
-    
-    Nos enfocamos en el tercero:
 
-    $ (I \land \neg B) \rightarrow Q_{c} $
+    Proponemos como invariante el siguiente predicado: 
 
-    Tenemos como datos a $B$ y a $Q_{c}$ (el que propusimos antes)
-
-    Ahora, a partir de esto y un poco de imaginación, podemos proponer el invariante
-
-    $$ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$$
-
-    Observando el código pre-ciclo y que $P_{c} \rightarrow I $, proponemos como $P_{c}$ a
-
-    $$i=0 \land res = 0$$
-
-    Aca ponemos la verificacion de correctitud del ciclo
+    $$I \equiv \{0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes}\}$$
 
     \begin{itemize}
-        \item $(i = 0 \land res = 0) \rightarrow 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
-        
-        Es verdadero, pues, al reemplazar i por 0 en el 2do queda: $0 \leq 0 \leq |ciudades|$. Al ser $|ciudades| \geq 0$
-        Y el $0 = \sum\limits_{k=0}^{0 - 1}{ciudades[i].habitantes}$ que es verdadero
+        \item $(I \land \neg B) \to Q_{c}$
+    \end{itemize}
 
-        \item $\{I \land B\}$  S $\{I\} \equiv \{I \land B\} \rightarrow wp(s,i)$
-        \\
-        \\
-        Calculo Auxiliar \\ 
-        \\
-         ${I \land B } \equiv {0 \leq i < |ciudades|\land res=\sum ciudades[j].habitantes}$ \\
-         $wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$ \\
-         $wp_{1}(i=i+1,I) \equiv def(i+1) \land_{L}I_{i+1}  $ \\
-         $\equiv 0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i + 1 - 1}{ciudades[k].habitantes} $ \\
-         $ \equiv 0 \leq i + 1 \leq |ciudades|  \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}$ 
+    \begin{align*}
+        (I \land \neg B) &\equiv \{0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i \geq |ciudades|\} \\
+        &\equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \\
+        &\equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}
+    \end{align*}
 
-         Vuevlo a \\
-         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes \land wp_{1}(i=i+1,I))$
-         \\
-         \\ 
-         Y lo reemplazamos \\
-         $ wp(s,i)\equiv wp(res=res+ciudades[i].habitantes, 0 \leq i \leq |ciudades|\land res=\sum ciudades[j].habitantes$ \\
+    Quedando una expresión exactamente equivalente a $Q_{c}$. Como vale $Q_{c} \to Q$ (pues $A \to A$ es siempre verdadero), afirmamos que $(I \land \neg B) \to Q_{c}$ vale 
 
-         $ \equiv def (res + ciudades[i].habitantes) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$
 
-         $ \equiv ((def(res) \land def(ciudades[i].habitantes) \land def(i)) \yLuego 0 \leq i < |ciudades|) \yLuego wp(i := i +1, I)_{res + ciudades[i].habitantes}^{res}$ \\
+    \begin{itemize}
+    \item $ \{I \land B\}$ S $\{I\}$
+    \end{itemize}
 
-        $ \equiv (0 \leq i < |ciudades| \yLuego (o \leq i + 1 \leq |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{j=0}^{i}{ciudades[j].habitantes}))$
+    Buscamos probar $(I \land B) \to wp(S, I)$
 
-        $ \equiv 0 \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes} \\\text{(A la sumatoria le sacamos restamos el ultimo termino)}$ 
+    $$ (I \land B) = (0 \leq i < |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})$$
 
-        Al final: 
+    $$wp(S, I) \equiv wp(res := res + ciudades[i].habitantes, wp(i := i + 1, I))$$
 
-        $ wp(S, I) \equiv \{ o \leq i < |ciudades| \land res = \sum\limits_{j=0}^{i - 1}{ciudades[j].habitantes}\}$
+    Calculamos la wp que necesitamos
 
-        que es exactamente igual a \{ $I \land B$\}. Por lo tanto podemos afirmar que $\{I \land B\} \rightarrow$ wp(S,I)
-    y que vale la tripla de Hoare
-        
-        \item
-            $ (I \land \neg B) \to Q_{c}$    \\
-            $ I \land \neg B \equiv 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i \leq |ciudades| $ \\
-            $ I \land \neg B \equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
+    \begin{align*}
+        wp (i := i + 1, I) \equiv def(i + 1) \yLuego I_{i +1}^{i} \\
+        \equiv \True \yLuego (0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) \\
+        \equiv -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} 
+    \end{align*}
 
-            Que es exactamente la misma formula que $Q_{c}$, por lo tanto la implicación vale.
+    Volviendo a $wp(S, I) \equiv wp(res := res + ciudades[i].habitantes, wp(i := i + 1, I))$
 
-            Como valen los 3 requerimientos del Teorema del Invariante, podemos afirmar que el programa es 
-            parcialmente correcto respecto a su
+    Llamaremos $\alpha = -1 \leq i < |ciudades| \land red =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} $
 
-    
-%     $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
+    $$ wp(res := res + ciudades[i].habitantes, -1 \leq i < |ciuaddes| \land red =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) $$
+    \begin{align*}
+        &\equiv def(res + ciudades[i].habitantes) \yLuego \alpha_{res + ciudades[i].habitantes}^{res} \\
+        &\equiv 0 \leq i < |ciudades| \yLuego (-1 \leq i < |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{k=0}^{i}{ciudades[k].habitantes} ) \\
+        &\equiv o \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes}) + ciudades[i].habitantes - ciudades[i].habitantes \\
+        &\equiv o \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})  \\
+    \end{align*}
+
+    Y esto es exactamente equivalente a $(I \land B)$. Como vale $(I \land B) \to (I \land B)$, podemos afirmar que $(I \land B) \to wp(S, I)$ y la tripla de Hoare es correcta
+
+
+    \begin{itemize}
+        \item $ P_{c} \to I$
         \end{itemize}
+
+    Observando el codigo anterior al ciclo, proponemos como $P_{c}$ al predicado $P_{c} \equiv \{i = 0 \land res = 0\}$
+
+    \begin{align*}
+        i = 0 \land res = 0 \to 0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \\
+        i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{0 - 1}{ciudades[k].habitantes} \\
+        i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
+        i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
+        i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = 0 \\
+    \end{align*}
+
+    De aca sacamos que $res = 0 \to res = 0$ \\
+    Y, además, que $|ciudades| \geq 0$ que es siempre verdadero al ser una cantidad.
+
+    Entonces, como tenemos $A \to \True$, podemos concluir con que es verdadero
+
+    Probadas todas las sentencias, podemos afirmar que vale el Teorema del Invariante y que el programa es parcialmente correcto.\\
+    Vamos ahora con el Teorema de Terminación
+
+    \underline{Teorema de Terminación}
+
+
+
+
     Ahora para probar que el ciclo termina, tenemos que probar:
 
     \begin{itemize}
@@ -488,64 +505,24 @@ endwhile
         \item $ I \land f_{v} \leq 0 \to \neg B$
     \end{itemize}
 
-    Vamos a probarlo:
+    Proponemos como función variante $f_{v} = |ciudades| - i$
+
+    \begin{itemize}
+        \item 
+            $(I \land f_{v} \leq 0) \to \neg B$
+    \end{itemize}
+
+    \begin{align*}
+        (I \land f_{v} \leq 0) \equiv (0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \land |ciudades| - i \leq 0)
+        \equiv i = |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes}
+    \end{align*}
 
     \begin{itemize}
         \item 
             $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
-
-            Teniendo en cuenta esto: 
-            \begin{itemize}
-                \item Invariante  $\equiv 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes}$
-                \item B $ \equiv i < |ciudades|$
-                \item Funcion variante (que proponemos): $|ciudades| - i$
-            \end{itemize}
-
-            Veamos: 
-
-            $0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0})$
+    \end{itemize}
     
-    
-            Calculemos la $wp(res := res + ciudades[i].habitantes; i := i + 1, |ciudades| - i < v_{0})$
-            \begin{align*}
-                \equiv &wp(res := res + ciudades[i].habitantes, wp(i := i + 1, |ciudades| - i < v_{0})) \\
-                \equiv &wp(res := res + ciudades[i].habitantes, def (i + 1) \yLuego |ciudades| - (i + 1) < v_{0}) \\
-                \equiv &wp(res := res + ciudades[i].habitantes, |ciudades| - (i + 1) < v_{0}) \\
-                \equiv &def(res + ciudades[i].habitantes) \yLuego |ciudades| - (i + 1) < v_{0} \\
-                \equiv &def(res) \land def(ciudades) \land def(i) \yLuego 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0} \\
-                \equiv &0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0}
-            \end{align*}
 
-
-            Ya tenemos cual es la wp, ahora probemos que la implicacion es correcta
-           $ 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0}) $
-
-        Nos parece que el res no nos hara falta, por lo que lo sacamos
-
-            \begin{align*}
-                0& \leq i \leq |ciudades| \land i < |ciudades| \land |ciudades| - i = v_{0} \to wp(S, f_{v} < v_{0}) \\
-                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0} \\
-                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < |ciudades| - i \\
-                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego - 1 < 0 \\
-                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego \True\\
-                0& \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades|
-            \end{align*}
-            \text{Y como i esta entre 0 y el modulo de ciudades y -1, entonces es correcto este punto}
-
-            Ahora, nos falta probar el otro requerimiento para poder decir que el ciclo termina
-        \item $ I \land f_{v} \leq 0 \to \neg B$
-            
-        \begin{align*}
-            0 \leq &i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| - i \leq 0 \to i \geq |ciudades| \\
-            0 \leq &i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \land |ciudades| \leq i \to i \geq |ciudades| \\
-            &i = |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[i].habitantes} \to i \geq |ciudades|  \\
-            &i = |ciudades| \to i \geq |ciudades|
-        \end{align*}
-            Que es verdadero /TODO Poner una mejor idea
-
-
-        Y como ambos son verdaderos, entonces termina el ciclo, terminando la demostracion de que el ciclo es correcto con respecto a su especificación
-        \end{itemize}
 
 
 

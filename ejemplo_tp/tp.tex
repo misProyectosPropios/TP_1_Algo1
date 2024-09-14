@@ -187,10 +187,9 @@ endwhile
 			 \begin{enumerate}
 				\item No hay repetidos entre mayores y menores, para evitar conflictos en los casos en los que no se podrían diferenciar las ciudades si se llaman igual
 				\item Por ejercicio, tiene que tener la misma cantidad de elementos la secuencia de menores y mayores
-    				\item Tiene que ser >= 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguna, al ser las cantidadaes siempre positivas
+    			\item Tiene que ser $\geq $ 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguna, al ser las cantidadaes siempre positivas
 				\item Cada ciudad que aparece en alguna secuencia, tiene que aparecer en la otra necesariamente
    			\end{enumerate}
-
 		}
 	}
 
@@ -435,7 +434,7 @@ endwhile
         &\equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}
     \end{align*}
 
-    Quedando una expresión exactamente equivalente a $Q_{c}$. Como vale $Q_{c} \to Q$ (pues $A \to A$ es siempre verdadero), afirmamos que $(I \land \neg B) \to Q_{c}$ vale 
+    Quedando una expresión exactamente equivalente a $Q_{c}$. Como vale $Q_{c} \to Q_{c}$ (pues $A \to A$ es siempre verdadero), afirmamos que $(I \land \neg B) \to Q_{c}$ vale 
 
 
     \begin{itemize}
@@ -451,16 +450,16 @@ endwhile
     Calculamos la wp que necesitamos
 
     \begin{align*}
-        wp (i := i + 1, I) \equiv def(i + 1) \yLuego I_{i +1}^{i} \\
-        \equiv \True \yLuego (0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) \\
-        \equiv -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} 
+        wp (i := i + 1, I) &\equiv def(i + 1) \yLuego I_{i +1}^{i} \\
+        &\equiv \True \yLuego (0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) \\
+        &\equiv -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} 
     \end{align*}
 
     Volviendo a $wp(S, I) \equiv wp(res := res + ciudades[i].habitantes, wp(i := i + 1, I))$
 
-    Llamaremos $\alpha = -1 \leq i < |ciudades| \land red =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} $
+    Llamaremos $\alpha = -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} $
 
-    $$ wp(res := res + ciudades[i].habitantes, -1 \leq i < |ciuaddes| \land red =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) $$
+    $$ wp(res := res + ciudades[i].habitantes, -1 \leq i < |ciuaddes| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) $$
     \begin{align*}
         &\equiv def(res + ciudades[i].habitantes) \yLuego \alpha_{res + ciudades[i].habitantes}^{res} \\
         &\equiv 0 \leq i < |ciudades| \yLuego (-1 \leq i < |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{k=0}^{i}{ciudades[k].habitantes} ) \\
@@ -478,15 +477,15 @@ endwhile
     Observando el codigo anterior al ciclo, proponemos como $P_{c}$ al predicado $P_{c} \equiv \{i = 0 \land res = 0\}$
 
     \begin{align*}
-        i = 0 \land res = 0 \to 0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \\
-        i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{0 - 1}{ciudades[k].habitantes} \\
-        i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
-        i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
-        i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = 0 \\
+        &i = 0 \land res = 0 \to 0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \\
+        &i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{0 - 1}{ciudades[k].habitantes} \\
+        &i = 0 \land res = 0 \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
+        &i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \\
+        &i = 0 \land res = 0 \to  0 \leq |ciudades| \land res = 0 \\
     \end{align*}
 
     De aca sacamos que $res = 0 \to res = 0$ \\
-    Y, además, que $|ciudades| \geq 0$ que es siempre verdadero al ser una cantidad.
+    \textcolor{red}{Aclaración: $|ciudades| \geq 0$ es siempre verdadero al ser una cantidad, y las cantidades no pueden ser negativas}
 
     Entonces, como tenemos $A \to \True$, podemos concluir con que es verdadero
 

@@ -10,7 +10,7 @@
 
 \fecha{\today}
 
-\materia{Algortimo y estructura de datos}
+\materia{Algoritmo y estructura de datos}
 \grupo{Compilados}
 
 \integrante{Frutos, I\~{n}aki}{74/24}{inakifrutos00@gmail.com}
@@ -161,7 +161,7 @@ endwhile
 		\requiere{sinRepetidos(menoresDeCiudades) \land sinRepetidos(mayoresDeCiudades) }
 		\requiere{|menoresDeCiudades| = |mayoresDeCiudades| }
 		\requiere{(todosElementosPositivos(menoresDeCiudades)) \land (todosElementosPositivos(mayoresDeCiudades))}
-		\requiere{estanContenidos(menoresDeCiudades,mayoresDeCiudades) \\ \wedge estanContenidos(mayoresDeCiudades,menoresDeCiudades)}
+		\requiere{estanContenidos(menoresDeCiudades,mayoresDeCiudades) \land \\ estanContenidos(mayoresDeCiudades,menoresDeCiudades)}
 		
 		\asegura{|res|=|mayoresDeCiudades|}
 		\asegura{estanContenidos(menoresDeCiudades,res)\land estanContenidos(res,menoresDeCiudades)}
@@ -176,6 +176,7 @@ endwhile
                 }
             }
         }
+        
      %   \asegura{\paraTodo[unalinea]{i}{\Ciudad}{i \in res \to \existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego \\
      %   menoresDeCiudades[j].nombre = i.nombre}
      %   
@@ -187,11 +188,11 @@ endwhile
 		
 
         \pred{sinRepetidos}{s: \TLista{Ciudad}}{
-            \paraTodo[unalinea]{i,j}{\ent}{0 \leq i < j < |s| \land i \neq j \implicaLuego s[i].nombre \neq s[j].nombre}
+            \paraTodo[unalinea]{i,j}{\ent}{0 \leq i, j < |s| \land i \neq j \implicaLuego s[i].nombre \neq s[j].nombre}
         }
 		
 		\pred{todosElementosPositivos}{s: \TLista{Ciudad}}{
-			\paraTodo[unalinea]{i}{\ent}{0\leq i<|s| \implicaLuego [i].habitantes \geq 0}
+			\paraTodo[unalinea]{i}{\ent}{0\leq i<|s| \implicaLuego s[i].habitantes \geq 0}
 		}
 
 		\pred{estanContenidos}{s,t: \TLista{Ciudad}} 
@@ -204,8 +205,9 @@ endwhile
 			 \begin{enumerate}
 				\item No hay repetidos entre mayores y menores, para evitar conflictos en los casos en los que no se podrían diferenciar las ciudades si se llaman igual
 				\item Por ejercicio, tiene que tener la misma cantidad de elementos la secuencia de menores y mayores
-    			\item Tiene que ser $\geq $ 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguna, al ser las cantidadaes siempre positivas
+    			\item Tiene que ser $\geq $ 0 la cantidad de habitantes, porque si es negativo no tendría sentido alguno, al ser las cantidadaes siempre positivas
 				\item Cada ciudad que aparece en alguna secuencia, tiene que aparecer en la otra necesariamente
+                \item En el segundo asegura estamos afirmando la doble implicación de conjuntos, dejando implícito que res tiene exactamente los mismos nombres (en las tuplas) que la lista de secuencia de ciudades. De esta forma, nos aseguramos que res no contenga elementos de más por fuera de la secuencia de entrada.
    			\end{enumerate}
 		}
 	}
@@ -218,7 +220,7 @@ endwhile
             \requiere{(esMatrizCuadrada(distancias))  }
             \requiere{(esMatrizSimetrica(distancias))  }
             \requiere{(todosElementosPositivos(distancias)) }
-            \requiere{(es0EnDiagonalPrincipal(conexion)) }
+            \requiere{(es0EnDiagonalPrincipal(distancias)) }
 	    \asegura{\\
             res = \True \iff \existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)} 
          %\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto()}  \Rightarrow res = \true
@@ -226,25 +228,25 @@ endwhile
 
 	    \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
-        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
+        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |posibleCamino| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
-        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+        \pred{esMatrizCuadrada}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego |matriz[i]| = |matriz|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {esMatrizCuadrada(matriz) \yLuego \\
             \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
-        \pred{todosElementosPositivos}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
-                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego seq[i][j] \geq 0}
+        \pred{todosElementosPositivos}{s: \TLista{\TLista{\ent}}}{
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |s| \implicaLuego
+                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |s[i]| \implicaLuego s[i][j] \geq 0}
             }
         }
         
-        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        \pred{es0EnDiagonalPrincipal}{matriz: \TLista{\TLista{\ent}}}
         {
-            esMatrizCuadrada(distancias)  \yLuego \\
-            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+            esMatrizCuadrada(matriz)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego matriz[i][i] = 0}
         }
    \end{proc}
 
@@ -271,37 +273,49 @@ endwhile
         \requiere{n > 0 }
         \requiere{(esMatrizCuadrada(conexion)) }
         \requiere{(esMatrizSimetrica(conexion)) }
-        \requiere{(esMatrizCuadrada(conexion)) }
+        \requiere{(todosElementos\_1\_o\_0(conexion)) }
         \requiere{(es0EnDiagonalPrincipal(conexion)) }
 
 	    \asegura{ \\
             (n = 1 \land conexion = conexion_{0}) \lor \\ %Que pasa si en un if then else hay dos condiciones con lo mismo?
             (n > 1 \land \existe[unalinea]{i}{\TLista{\TLista{\TLista{\ent}}}}{|i| = n \yLuego \\ 
-                \paraTodo[unalinea]{j}{\ent}{1 \geq j < |i| \implicaLuego esMultiplicacionDe(i[j], i[j - 1])} \land conexion = i[|i| - 1]
+                \paraTodo[unalinea]{j}{\ent}{1 \geq j < |i| \implicaLuego esMultiplicacionDe(conexion_{0}, i[j - 1], i[j])} \land conexion = i[|i| - 1]
             })
         }
 	    
-        %Hacer auxiliar que vea si una matriz es multiplicacion de otra
-	    
-        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+        \pred{esMatrizCuadrada}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego |matriz[i]| = |matriz|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {esMatrizCuadrada(matriz) \yLuego \\
             \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
    
-        \pred{todosElementos\_1\_o\_0}{seq}{
-            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |seq| \implicaLuego
-                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |seq[i]| \implicaLuego (seq[i][j] = 0 \lor seq[i][j] = 1)}
+        \pred{todosElementos\_1\_o\_0}{matriz: \TLista{\TLista{\ent}}}{
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |matriz| \implicaLuego
+                \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |matriz[i]| \implicaLuego (matriz[i][j] = 0 \lor matriz[i][j] = 1)}
            }
         }
-
-        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        
+        \pred{es0EnDiagonalPrincipal}{matriz: \TLista{\TLista{\ent}}}
         {
-            esMatrizCuadrada(distancias)  \yLuego \\
-            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+            esMatrizCuadrada(matriz) \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego matriz[i][i] = 0}
         } 
 
+
+        \pred{esMultiplicacionDe}{matrizAMultiplicar, matrizMultiplicada, res: \TLista{\TLista{\ent}}}{
+            esMatrizCuadrada(matrizAMultiplicar) \land esMatrizCuadrada(matrizMultiplicada) \land esMatrizCuadrada(res)\\
+            |matrizAMultiplicar| =  |matrizMultiplicada| \land |res| = |matrizMultiplicada| \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matrizAMultiplicar| \implicaLuego \\
+                \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matrizAMultiplicar[i]| \implicaLuego \\
+                res[i][j] = productoEscalar(matrizAMultiplicar[i], matrizMultiplicada[j])
+                }
+            }
+        }
+
+        \aux{productoEscalar}{vector1, vector2: \TLista{\ent}}{\ent}{
+            \sum\limits_{k = 0}^{min(|vector1|, |vector2|) - 1}{vector1[k] * vector2[k]}
+        }
     \end{proc}
 
 	\fbox{
@@ -311,6 +325,7 @@ endwhile
 				\item Un camino de 0 saltos no tiene sentido, pues los caminos tenian al menos 1 salto
 				\item Luego, si es de 1 salto, entonces deberia devolver la misma matriz
 				\item Si n es mayor o igual a 2, entonces elevarlo ya lo sabemos como se hace correctamente y no tenemos problemas
+                \item En realidad, el producto matricial es entre filas y columnas. Pero como son matrices simétricas, es equivalente a hacer filas por filas.
 			\end{enumerate}
 
 		}
@@ -323,7 +338,7 @@ endwhile
         \requiere{(0 \leq origen < |distancias|) \land (0 \leq destino < |distancias|) }
         \requiere{(esMatrizCuadrada(distancias)) }
         \requiere{(esMatrizSimetrica(distancias)) }
-        \requiere{(es0EnDiagonalPrincipal(conexion)) }
+        \requiere{(es0EnDiagonalPrincipal(distancias)) }
             
 	    \asegura{\\
             (\neg hayCaminoCorrecto(distancias, desde, hasta) \land res = \TLista{}) \lor \\
@@ -342,8 +357,8 @@ endwhile
         \pred{hayCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, desde: \ent, hasta: \ent}
         {\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)}}
 
-        \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
-        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+        \pred{esMatrizCuadrada}{matriz: \TLista{\TLista{\ent}}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego |matriz[i]| = |matriz|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {esMatrizCuadrada(matriz) \yLuego \\
@@ -351,12 +366,12 @@ endwhile
         
         \pred{esCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, posibleCamino: \TLista{\ent}, desde: \ent, hasta: \ent}
         {(|posibleCamino | \geq 2) \implicaLuego (posibleCamino[i] = desde \land posibleCamino[|posibleCamino| - 1] = hasta) \land \\ 
-        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
+        \paraTodo[unalinea]{x}{\ent}{1 \leq x < |posibleCamino| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
         
-        \pred{es0EnDiagonalPrincipal}{distancias: \TLista{\TLista{\ent}}}
+        \pred{es0EnDiagonalPrincipal}{matriz: \TLista{\TLista{\ent}}}
         {
-            esMatrizCuadrada(distancias)  \yLuego \\
-            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego distancias[i][i] = 0}
+            esMatrizCuadrada(matriz)  \yLuego \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego matriz[i][i] = 0}
         } 
 
     \end{proc}
@@ -403,7 +418,7 @@ endwhile
     
     Para ello, operamos de la siguiente manera
 
-    $$P \to wp(S1,S2,S3,S4, Q)$$
+    $$P \to wp(S1;S2;S3;S4, Q)$$
 
     O, usando los axiomas 
 
@@ -483,8 +498,8 @@ endwhile
     \begin{align*}
         &\equiv def(res + ciudades[i].habitantes) \yLuego \alpha_{res + ciudades[i].habitantes}^{res} \\
         &\equiv 0 \leq i < |ciudades| \yLuego (-1 \leq i < |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{k=0}^{i}{ciudades[k].habitantes} ) \\
-        &\equiv o \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes}) + ciudades[i].habitantes - ciudades[i].habitantes \\
-        &\equiv o \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})  \\
+        &\equiv 0 \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes}) + ciudades[i].habitantes - ciudades[i].habitantes \\
+        &\equiv 0 \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})  \\
     \end{align*}
 
     Y esto es exactamente equivalente a $(I \land B)$. Como vale $(I \land B) \to (I \land B)$, podemos afirmar que $(I \land B) \to wp(S, I)$ y la tripla de Hoare es correcta
@@ -600,7 +615,7 @@ endwhile
         &\equiv |ciudades| - i = v_{0} \to |ciudades| - i - 1 < |ciudades| - i \\
         &\equiv |ciudades| - i = v_{0} \to - 1 < 0 \\
         &\equiv |ciudades| - i = v_{0} \to - True \\
-        &\equiv \True
+        &\equiv \True   
     \end{align*}
 
     Probadas estas 2 sentencias del Teorema de  Terminación podemos afirmar que el ciclo termina
@@ -631,7 +646,7 @@ endwhile
         $P = \{ \\
         \existe[unalinea]{i}{\ent}{0 \leq i < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
         \paraTodo[unalinea]{i}{\ent}{0 \leq i < |ciudades| \implicaLuego ciudades[i].habitantes \geq 0} \land \\
-        \paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].habitantes} 
+        \paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].nombre} 
 \} \to \True \\
         \equiv \True$
     
@@ -649,6 +664,9 @@ endwhile
     
     Entonces, podemos concluir con que el programa es correcto respecto a su especificación
     
+
+    %<><><><><><><><><><><><><><><><>
+    % Ej 2.2
     \item
 
    Debemos agregarle esa nueva condición a la post-condición del programa
@@ -668,23 +686,40 @@ endwhile
    \textcircled{2} $\paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0}$
 
    Las nuevas propuestas son: 
-    
-    $  I \equiv \{  0 \leq i \leq |ciudades| \land res = \sum\limits^{i- 1}_{j = 0}{ciudades[j].habitantes} \land \\ 
-    \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
-    \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
-
-
-
-    $ P_{c} \equiv \{i = 0 \land res = 0 \land \\
+    \begin{itemize}
+        \item $  I \equiv \{  0 \leq i \leq |ciudades| \land res = \sum\limits^{i- 1}_{j = 0}{ciudades[j].habitantes} \land \\ 
+        \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+        \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+        \item $ P_{c} \equiv \{i = 0 \land res = 0 \land \\
         \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
     \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+        \item $Q_{c} \equiv Q \equiv res = \sum\limits^{|ciudades| - 1}_{j = 0}{ciudades[j].habitantes} \land res > 50.000$
+    \end{itemize}
     
-    Vayamos, sección por sección, viendo qué puede llegar a cambiar (estas nuevas propuestas) respecto a la demostración original del ciclo y el programa
 
-    (Antes de continuar, pongamos nombre a ambos predicados para facilitar lectura y rotación: 
-    $\alpha =  \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000}$ \\
-    $ \beta = \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0}$
+
+
+    
+    
+    Vayamos, sección por sección, viendo qué puede llegar a cambiar de estas nuevas propuestas respecto a la demostración original del ciclo y el programa
+
+    (Antes de continuar, pongamos nombre a ambos predicados para facilitar lectura y notación: 
+    \begin{itemize}
+    \item$\alpha =  \existe[unalinea]{i}{\ent}{0 \leq |ciudades| < 0\yLuego ciudades[i].habitantes > 50.000}$ \\
+    \item$ \beta = \paraTodo[unalinea]{i}{\ent}{0 \leq |ciudades| < 0\implicaLuego ciudades[i].habitantes > 0}$
+    \end{itemize}
     )
+
+    Probemos que $Q_{c} \to Q$
+
+    \begin{align*}
+      (res = \sum\limits^{|ciudades| - 1}_{j = 0}{ciudades[j].habitantes} \land res > 50.000) \to ( res = \sum\limits^{|ciudades| - 1}_{j = 0}{ciudades[j].habitantes} \land res > 50.000)
+    \end{align*}
+
+    Al ser esencialmente los mismos predicados, entonces es verdadero que $Q_{c} \to Q$
+
+
+    \underline{Teorema del Invariante}
 
     \begin{itemize}
         \item $P_{c} \to I$
@@ -693,17 +728,56 @@ endwhile
     Para los nuevos $P_{c}$ e $I$, la demostración sigue valiendo igual, ya que tanto $\alpha$ como $\beta$ están explicitamente incorporados a 
     $P_{c}$ e I (y, por ende, se implican). Lo demás, no cambia y continúa siendo la misma implicación que la hecha antes
 
+    \begin{align*}
+        &i = 0 \land res = 0 \land \alpha \land \beta \to 0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land \alpha \land \beta\\
+        &i = 0 \land res = 0 \land \alpha \land \beta \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{0 - 1}{ciudades[k].habitantes}  \land \alpha \land \beta\\
+        &i = 0 \land res = 0 \land \alpha \land \beta \to 0 \leq 0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \land \alpha \land \beta \\
+        &i = 0 \land res = 0 \land \alpha \land \beta \to  0 \leq |ciudades| \land res = \sum\limits_{k=0}^{-1}{ciudades[k].habitantes} \land \alpha \land \beta \\
+        &i = 0 \land res = 0 \land \alpha \land \beta \to  0 \leq |ciudades| \land res = 0 \land \alpha \land \beta \\
+    \end{align*}
+
+    Entonces, como $\alpha \to \alpha$ es $\True$ siempre, lo mismo con beta y con res. Y el $i = 0\to$ 0 $\leq |ciudades|$ es verdadero, al ser
+    verdadero la consecuencia con respecto a las premisas siempre ($i = 0\to  0 \leq |ciudades| \equiv \True$) 
+
+    
     \begin{itemize}
         \item $\{ I \land B \}$ S $ \{ I\}$
     \end{itemize}
 
     A la hora de desarrollar esta prueba, nos centramos en I y la wp(S, I) que hay que calcular. \\
     En particular, la wp(S,I) sigue los mismos pasos (que la hecha en la sección anterior) arrastrando $\alpha $ y $\beta$ hasta el resultado Finalmente
-    de la wp. Como $\alpha $ ni $\beta$ involucran a las variables i ni res (variables afectadas por la implementación en código S), a la
+    de la wp. Como $\alpha $ ni $\beta$ no involucran a las variables i ni res (variables afectadas por la implementación en código S), a la
     hora de construir los predicados $I_{i + 1}^{i}$ y $wp(i := i + 1, I)_{res + ciudades[i].habitantes}^{res}$ (parte del procedimiento de 
     reducción de las wp correspondientes) $\alpha $ y $\beta$ son arrastados sin modificarse. \\
 
-    Por lo tanto, la tripla de Hoare termina siendo igualente correcta
+    Buscamos probar $(I \land B) \to wp(S, I)$
+
+    $$ (I \land B) = (\alpha \land \beta \land 0 \leq i < |ciudades| \land res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})$$
+
+    $$wp(S, I) \equiv wp(res := res + ciudades[i].habitantes, wp(i := i + 1, I))$$
+
+    Calculamos la wp que necesitamos
+
+    \begin{align*}
+        wp (i := i + 1, I) &\equiv def(i + 1) \yLuego I_{i +1}^{i} \\
+        &\equiv \True \yLuego (\alpha \land \beta \land 0 \leq i + 1 \leq |ciudades| \land res = \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) \\
+        &\equiv \alpha \land \beta \land -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} 
+    \end{align*}
+
+    Volviendo a $wp(S, I) \equiv wp(res := res + ciudades[i].habitantes, wp(i := i + 1, I))$
+
+    Llamaremos $n = -1 \leq i < |ciudades| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes} $
+
+    $$ wp(res := res + ciudades[i].habitantes, -1 \leq i < |ciuaddes| \land res =  \sum\limits_{k=0}^{i}{ciudades[k].habitantes}) $$
+    \begin{align*}
+        &\equiv def(res + ciudades[i].habitantes) \yLuego n_{res + ciudades[i].habitantes}^{res} \\
+        &\equiv 0 \leq i < |ciudades| \yLuego (\alpha \land \beta \land -1 \leq i < |ciudades| \land res + ciudades[i].habitantes = \sum\limits_{k=0}^{i}{ciudades[k].habitantes} ) \\
+        &\equiv \alpha \land \beta \land  0 \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes}) + ciudades[i].habitantes - ciudades[i].habitantes \\
+        &\equiv \alpha \land \beta \land  0 \leq i < |ciudades| \yLuego res = (\sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes})  \\
+    \end{align*}
+
+
+    Por lo tanto, la tripla de Hoare $\{ I \land B \}$ S $ \{ I\}$ termina siendo igualente correcta
 
     \begin{itemize}
         \item $(I \land \neg B) \to Q_{c}$
@@ -720,24 +794,134 @@ endwhile
     Por $/alpha$ sabemos que, en la secuencia ciudades, hay (al menos) una tupla cuyo numero de habitantes es > 50.000. También, por $\beta$, sabemos
     que en res nunca se suman cantidad negativas.
 
-    Por lo tnato, podemos concluir que siendo que $res = \sum\limits^{|ciudades|- 1}_{j = 0}{ciudades[j].habitantes}$, siempre sera que res > 50.000
+    Por lo tanto, podemos concluir que siendo que $res = \sum\limits^{|ciudades|- 1}_{j = 0}{ciudades[j].habitantes}$, siempre sera que res > 50.000
     
     Al final, podemos afirmar que la implicación continúa siendo validado y que el Teorema del Invariante sigue siendo válido, siendo de esta forma parcialmente correcto. 
 
     \underline{Teorema de Terminación}
-
+    
     En cuanto al teorema de terminación, termina siendo sustancialmente la misma (que la desarrollada en la sección anterior). La función 
     variante con la guarda B son las mismas. Lo único que aparece nuevo es el invariante I, mas su nueva forma no modifica los resultados obtenidos
+
+    \begin{align*}
+        (I \land f_{v} \leq 0) &\equiv (\alpha \land \beta \land 0 \leq i \leq |ciudades| \land res = \sum\limits_{k=0}^{i -1}{ciudades[k].habitantes} \land |ciudades| - i \leq 0) \\
+        &\equiv \alpha \land \beta \land i = |ciudades| \land res = \sum\limits_{k=0}^{i -1}{ciudades[k].habitantes} \\
+        &\equiv \alpha \land \beta \land i = |ciudades| \land res = \sum\limits_{k=0}^{|ciudades| -1}{ciudades[k].habitantes}
+    \end{align*}
+
+
+    \begin{align*}
+        \neg B &\equiv i \geq |ciudades|
+    \end{align*}
+
+
+    \begin{align*}
+        ((I \land f_{v} \leq 0) \to \neg B) &\equiv (\alpha \land \beta \land i = |ciudades| \land res = \sum\limits_{k=0}^{|ciudades| -1}{ciudades[k].habitantes} \to i \geq |ciudades|)
+    \end{align*}
+
+    Como $\alpha$ y $\beta$ no dan ninguna restricción con respecto a \textbf{i} ni a \textbf{res}, entonces no afecta y lo podemos ignorar \\
+    Como $i = |ciudades| \to i \leq |ciudades|$, entonces esto es \True . Y por lo tanto $(I \land f_{v} \leq 0) \to \neg B $ vale
+
+    \begin{itemize}
+        \item 
+            $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
+    \end{itemize}
+    
+    Buscamos ver que  $(I \land B \ f_{v} = v_{0}) \to wp(s, f_{v} < v_{0}) $
+    
+    \begin{align*}
+        I \land B \ f_{v} = v_{0} &\equiv \alpha \land \beta \land 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \\
+            &\equiv \alpha \land \beta \land 0 \leq i < |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land |ciudades| - i = v_{0}
+    \end{align*}
+
+     $$wp(s, f_{v}<v_{0}) \equiv  wp(res := res + ciudades[i].habitantes, wp(i := i +1, |ciudades| - i < v_{0}))$$
+
+      Vamos a calcular primero la $wp(i := i +1, |ciudades| - i < v_{0}) $
+
+      \begin{align*}
+        wp(i := i +1, |ciudades| - i < v_{0}) &\equiv def (i + 1) \yLuego (|ciudades| - i < v_{0})_{i + 1}^{i} \\
+        &\equiv \True \yLuego (|ciudades| - (i + 1) < v_{0}) \\
+        &\equiv |ciudades| - (i + 1) < v_{0}
+    \end{align*}
+
+    Ahora, como ya calculamos esa $wp(i := i +1, |ciudades| - i < v_{0}) $, la reemplazamos en  \\
+    $$ wp(res := res + ciudades[i].habitantes, wp(i := i +1, |ciudades| - i < v_{0}))$$
+
+    \begin{align*}
+        &\equiv def (res + ciudades[i].habitantes) \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res} \\
+        &\equiv def(res) \land def(ciudades) \land def(i) \yLuego 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
+        &\equiv \True \land \True \land \True \land \yLuego 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
+        &\equiv 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
+        &\equiv 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0}
+    \end{align*}
+
+    Finalmente queremos ver que $(I \land B \land f_{v} = v_{0} \to wp(S, f_{v} < v_{0}))$
+
+    \begin{align*}
+        \alpha \land \beta \land 0 \leq i < |ciudades| \land |ciudades| - i = v_{0} \to 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0}
+    \end{align*}
+
+    \textcolor{red}{Aclaración (Como no nos hacia falta el res, lo decidimos sacar y no ponerlo directamente)}
+
+    Por un lado, tenemos $0 \leq i < |ciudades| \to 0 \leq i < |ciudades|$, que es \True
+
+    Y, por el otro 
+
+    \begin{align*}
+        &\equiv |ciudades| - i = v_{0} \to |ciudades| - (i + 1) < v_{0} \\
+        &\equiv |ciudades| - i = v_{0} \to |ciudades| - i - 1 < |ciudades| - i \\
+        &\equiv |ciudades| - i = v_{0} \to - 1 < 0 \\
+        &\equiv |ciudades| - i = v_{0} \to True \\
+        &\equiv \True   
+    \end{align*}
+
+
 
     Al llegar a la última parte (fuera del ciclo), es simple observar que las WPs calculadas sobre el código pre-ciclo arrastran a $\alpha$ y $\beta$ así como llegan
     (sin modificaciones). Nuevamente, como sus fórmulas que no involucran a i ni a res, simplemente se acoplan sin modificación alguna.
 
-    Al final, observamos que tanto $\alpha$ y $\beta$ son expresiones que estan incluidas en P origianl. Por tanto, P implica la precondición
+    Al final, observamos que tanto $\alpha$ y $\beta$ son expresiones que estan incluidas en P original. Por tanto, P implica la precondición
     del ciclo (construida a partir de todo el desarrollo anterior), la implementación es correcta respecto a su especificación y logramos 
     probar que el valor obtenido es mayor a 50.000.
 
+    \begin{align*}
+        wp(S1;S21, P_{c}) &\equiv wp(res := 0, wp(i := 0, i = 0 \land res = 0 )) \\
+        &\equiv wp(res := 0, def(i + 1) \yLuego (i = 0 \land res = 0 \land \alpha \land \beta)_{0}^{i}) \\
+        &\equiv wp(res := 0, \True \yLuego (i = 0 \land res = 0 \land \alpha \land \beta)_{0}^{i}) \\
+        &\equiv wp(res := 0, (i = 0 \land res = 0 \land \alpha \land \beta)_{0}^{i}) \\
+        &\equiv wp(res := 0, 0 = 0 \land res = 0 \land \alpha \land \beta) \\
+        &\equiv wp(res := 0, \True \land res = 0 \land \alpha \land \beta) \\
+        &\equiv wp(res := 0, res = 0 \land \alpha \land \beta) \\
+        &\equiv def (0) \yLuego (res = 0  \land \alpha \land \beta)_{0}^{res} \\
+        &\equiv \True \yLuego (res = 0 \land \alpha \land \beta)_{0}^{res} \\
+        &\equiv (res = 0  \land \alpha \land \beta)_{0}^{res} \\
+        &\equiv 0 = 0  \land \alpha \land \beta \\
+        &\equiv \True  \land \alpha \land \beta\\
+        &\equiv \alpha \land \beta
+    \end{align*}
 
+    Y como el 
+    
+    $P \to P_{c} \equiv \alpha \land \beta \land \paraTodo[unalinea]{i, j}{\ent}{0 \leq i < j < |ciudades| \implicaLuego ciudades[i].nombre \neq ciudades[j].nombre}  \to \alpha \land \beta$
+    
+    es una implicación de la forma $A \land B \land C \to A \land B$, que son verdaderas necesariamente
 
+    \underline{Conclusión}
+
+    Como ya demostramos los siguientes puntos
+    \begin{itemize}
+        \item $P \to P_{c}$
+        \item Teorema del Invariante para el ciclo
+        \item Teorema de Terminación del ciclo
+        \item $Q_{c} \to Q$
+    \end{itemize}
+    
+    Entonces, podemos concluir con que el programa es correcto respecto a su nueva especificación 
+    
+    $$res=\sum\limits_{j = 0}^{|ciudades| - 1}{ciudades[i].habitantes} \land res > 50.000$$
+
+    y, como demostramos que la nueva especificación es  correcta, entonces el programa siempre que cumpla su precondición va a devolver un
+    res $>$ 50.000, además de la sumatoria.
 
 
 

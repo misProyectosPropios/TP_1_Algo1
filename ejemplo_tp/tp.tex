@@ -824,13 +824,13 @@ endwhile
 
     \begin{itemize}
         \item 
-            $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
+            $\{ I \land B \land f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$
     \end{itemize}
     
-    Buscamos ver que  $(I \land B \ f_{v} = v_{0}) \to wp(s, f_{v} < v_{0}) $
+    Buscamos ver que  $(I \land B \land f_{v} = v_{0}) \to wp(s, f_{v} < v_{0}) $
     
     \begin{align*}
-        I \land B \ f_{v} = v_{0} &\equiv \alpha \land \beta \land 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \\
+        I \land B \land f_{v} = v_{0} &\equiv \alpha \land \beta \land 0 \leq i \leq |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land i < |ciudades| \land |ciudades| - i = v_{0} \\
             &\equiv \alpha \land \beta \land 0 \leq i < |ciudades| \yLuego res = \sum\limits_{k=0}^{i - 1}{ciudades[k].habitantes} \land |ciudades| - i = v_{0}
     \end{align*}
 

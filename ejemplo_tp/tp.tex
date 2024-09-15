@@ -682,17 +682,17 @@ endwhile
 
    Añadimos las siguientes fórmulas extraídas de los requiere de la especificación.
 
-   \textcircled{1} $ \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000}$  \\
-   \textcircled{2} $\paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0}$
+   \textcircled{1} $ \existe[unalinea]{i}{\ent}{0 \leq |ciudades| < 0 \yLuego ciudades[i].habitantes > 50.000}$  \\
+   \textcircled{2} $\paraTodo[unalinea]{i}{\ent}{0 \leq |ciudades| < 0 \implicaLuego ciudades[i].habitantes > 0}$
 
    Las nuevas propuestas son: 
     \begin{itemize}
         \item $  I \equiv \{  0 \leq i \leq |ciudades| \land res = \sum\limits^{i- 1}_{j = 0}{ciudades[j].habitantes} \land \\ 
-        \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
-        \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+        \existe[unalinea]{i}{\ent}{0 \leq |ciudades| < 0 \yLuego ciudades[i].habitantes > 50.000} \land \\
+        \paraTodo[unalinea]{i}{\ent}{0 \leq |ciudades| < 0 \implicaLuego ciudades[i].habitantes > 0} \}$
         \item $ P_{c} \equiv \{i = 0 \land res = 0 \land \\
         \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
-    \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+    \paraTodo[unalinea]{i}{\ent}{0 \leq |ciudades| < 0 \implicaLuego ciudades[i].habitantes > 0} \}$
         \item $Q_{c} \equiv Q \equiv res = \sum\limits^{|ciudades| - 1}_{j = 0}{ciudades[j].habitantes} \land res > 50.000$
     \end{itemize}
     

@@ -165,7 +165,24 @@ endwhile
 		
 		\asegura{|res|=|mayoresDeCiudades|}
 		\asegura{estanContenidos(menoresDeCiudades,res)\land estanContenidos(res,menoresDeCiudades)}
-        \asegura{\existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego menoresDeCiudades[j].nombre = t.nombre \land \existe[unalinea]{k}{\ent}{0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre=t.nombre \land (t.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes)}}}
+        \asegura{
+            \paraTodo[unalinea]{i}{Ciudad}{i \in res \to \\
+                \existe[unalinea]{j}{\ent}{ 
+                    0\leq j<|menoresDeCiudades| \yLuego menoresDeCiudades[j].nombre = i.nombre \land \\
+                    \existe[unalinea]{k}{\ent}{
+                        0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre= i.nombre \land \\
+                        i.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes
+                    }
+                }
+            }
+        }
+     %   \asegura{\paraTodo[unalinea]{i}{\Ciudad}{i \in res \to \existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego \\
+     %   menoresDeCiudades[j].nombre = i.nombre}
+     %   
+     %   }}
+       % \existe[unalinea]{k}{\ent}{0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre= i.nombre \land i.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes)
+       % }}}
+      %  \asegura{\existe[unalinea]{j}{\ent}{0\leq j<|menoresDeCiudades| \yLuego menoresDeCiudades[j].nombre = t.nombre \land \existe[unalinea]{k}{\ent}{0 \leq k <|mayoresDeCiudades| \yLuego mayoresDeCiudades[k].nombre=t.nombre \land (t.habitantes = menoresDeCiudades[j].habitantes + mayoresDeCiudades[k].habitantes)}}}
 		%\asegura{res=\True \iff  ((\exists j:\mathds{Z})((0\leq j<|menoresDeCiudades| \land _{L} menoresDeCiudades[j].nombre=t.nombre) \land (\exists k:\mathds{Z})((0\leq k <|mayoresDeCiudades| \land _{L} mayoresDeCiudades[k].nombre=t.nombre) \land \\ (t.habitantes=menoresDeCiudades[j].habitantes+mayoresDeCiudades[k].habitantes)))}
 		
 
@@ -212,7 +229,7 @@ endwhile
         \paraTodo[unalinea]{x}{\ent}{1 \leq x < |seq| \implicaLuego ((distancias[posibleCamino[x]][posibleCamino[x - 1]] \neq 0))} } 
 
         \pred{esMatrizCuadrada}{distancias: \TLista{\TLista{\ent}}}
-        {\paraTodo{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
+        {\paraTodo[unalinea]{i}{\ent}{0 \leq i < |distancias| \implicaLuego |distancias[i]| = |distancias|}}
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {esMatrizCuadrada(matriz) \yLuego \\
@@ -633,6 +650,96 @@ endwhile
     Entonces, podemos concluir con que el programa es correcto respecto a su especificación
     
     \item
+
+   Debemos agregarle esa nueva condición a la post-condición del programa
+
+   $$ Q \equiv \{ res = \sum\limits^{|ciudades| - 1}_{j = 0}{ciudades[j].habitantes} \land res > 50.000\} $$
+
+
+   A la hora de volver a realizar la demostración del programa, deberíamos volver a tomar $Q_{c} = Q$ (donde $Q$ tiene la nueva fórmula).
+    
+
+   Cuando llegamos al ciclo while y nos enfocamos en realizar la demostración de correctitud; al tener un nuevo 
+   $Q_{c}$, debemos ajustar tanto el invariante I como la pre-condición (del ciclo) $P_{c}$ propuestas
+
+   Añadimos las siguientes fórmulas extraídas de los requiere de la especificación.
+
+   \textcircled{1} $ \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000}$  \\
+   \textcircled{2} $\paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0}$
+
+   Las nuevas propuestas son: 
+    
+    $  I \equiv \{  0 \leq i \leq |ciudades| \land res = \sum\limits^{i- 1}_{j = 0}{ciudades[j].habitantes} \land \\ 
+    \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+    \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+
+
+
+    $ P_{c} \equiv \{i = 0 \land res = 0 \land \\
+        \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000} \land \\
+    \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0} \}$
+    
+    Vayamos, sección por sección, viendo qué puede llegar a cambiar (estas nuevas propuestas) respecto a la demostración original del ciclo y el programa
+
+    (Antes de continuar, pongamos nombre a ambos predicados para facilitar lectura y rotación: 
+    $\alpha =  \existe[unalinea]{i}{\ent}{0 \leq < |ciudades| \yLuego ciudades[i].habitantes > 50.000}$ \\
+    $ \beta = \paraTodo[unalinea]{i}{\ent}{0 \leq < |ciudades| \implicaLuego ciudades[i].habitantes > 0}$
+    )
+
+    \begin{itemize}
+        \item $P_{c} \to I$
+    \end{itemize}
+
+    Para los nuevos $P_{c}$ e $I$, la demostración sigue valiendo igual, ya que tanto $\alpha$ como $\beta$ están explicitamente incorporados a 
+    $P_{c}$ e I (y, por ende, se implican). Lo demás, no cambia y continúa siendo la misma implicación que la hecha antes
+
+    \begin{itemize}
+        \item $\{ I \land B \}$ S $ \{ I\}$
+    \end{itemize}
+
+    A la hora de desarrollar esta prueba, nos centramos en I y la wp(S, I) que hay que calcular. \\
+    En particular, la wp(S,I) sigue los mismos pasos (que la hecha en la sección anterior) arrastrando $\alpha $ y $\beta$ hasta el resultado Finalmente
+    de la wp. Como $\alpha $ ni $\beta$ involucran a las variables i ni res (variables afectadas por la implementación en código S), a la
+    hora de construir los predicados $I_{i + 1}^{i}$ y $wp(i := i + 1, I)_{res + ciudades[i].habitantes}^{res}$ (parte del procedimiento de 
+    reducción de las wp correspondientes) $\alpha $ y $\beta$ son arrastados sin modificarse. \\
+
+    Por lo tanto, la tripla de Hoare termina siendo igualente correcta
+
+    \begin{itemize}
+        \item $(I \land \neg B) \to Q_{c}$
+    \end{itemize}
+
+    Siguiendo la operatoria de la sección anterior
+
+    $$ (I \land \neg B) \equiv i = |ciudades| \land res = \sum\limits^{|ciudades|- 1}_{j = 0}{ciudades[j].habitantes} \land \alpha \land \beta $$
+
+    La expresión de res continua siendo la misma que la que aparece en $Q_{c}$. Por lo tanto, no rompe la implicación
+
+    Veamos si a partir de $res = \sum\limits^{|ciudades|- 1}_{j = 0}{ciudades[j].habitantes} \land \alpha \land \beta$ podemos caer en res > 50.000
+
+    Por $/alpha$ sabemos que, en la secuencia ciudades, hay (al menos) una tupla cuyo numero de habitantes es > 50.000. También, por $\beta$, sabemos
+    que en res nunca se suman cantidad negativas.
+
+    Por lo tnato, podemos concluir que siendo que $res = \sum\limits^{|ciudades|- 1}_{j = 0}{ciudades[j].habitantes}$, siempre sera que res > 50.000
+    
+    Al final, podemos afirmar que la implicación continúa siendo validado y que el Teorema del Invariante sigue siendo válido, siendo de esta forma parcialmente correcto. 
+
+    \underline{Teorema de Terminación}
+
+    En cuanto al teorema de terminación, termina siendo sustancialmente la misma (que la desarrollada en la sección anterior). La función 
+    variante con la guarda B son las mismas. Lo único que aparece nuevo es el invariante I, mas su nueva forma no modifica los resultados obtenidos
+
+    Al llegar a la última parte (fuera del ciclo), es simple observar que las WPs calculadas sobre el código pre-ciclo arrastran a $\alpha$ y $\beta$ así como llegan
+    (sin modificaciones). Nuevamente, como sus fórmulas que no involucran a i ni a res, simplemente se acoplan sin modificación alguna.
+
+    Al final, observamos que tanto $\alpha$ y $\beta$ son expresiones que estan incluidas en P origianl. Por tanto, P implica la precondición
+    del ciclo (construida a partir de todo el desarrollo anterior), la implementación es correcta respecto a su especificación y logramos 
+    probar que el valor obtenido es mayor a 50.000.
+
+
+
+
+
 
 \end{enumerate}
 \end{document}

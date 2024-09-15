@@ -622,12 +622,12 @@ endwhile
 
     Finalmente, probamos el Teorema del Invariante y el Teorema de Terminación. Por lo tanto, el ciclo es correcto con respecto a su especificación
 
-    3. $wp(S1;S21, P_{c})$
+    3. $wp(S1;S2, P_{c})$
 
     Del ciclo, recuperamos el $P_{c} \equiv \{i = 0 \land res = 0 \} $
 
     \begin{align*}
-        wp(S1;S21, P_{c}) &\equiv wp(res := 0, wp(i := 0, i = 0 \land res = 0 )) \\
+        wp(S1;S2, P_{c}) &\equiv wp(res := 0, wp(i := 0, i = 0 \land res = 0 )) \\
         &\equiv wp(res := 0, def(i + 1) \yLuego (i = 0 \land res = 0)_{0}^{i}) \\
         &\equiv wp(res := 0, \True \yLuego (i = 0 \land res = 0)_{0}^{i}) \\
         &\equiv wp(res := 0, (i = 0 \land res = 0)_{0}^{i}) \\

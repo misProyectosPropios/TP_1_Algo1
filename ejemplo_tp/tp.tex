@@ -299,10 +299,10 @@ endwhile
 
         \pred{esMatrizSimetrica}{matriz: \TLista{\TLista{\ent}}}
         {esMatrizCuadrada(matriz) \yLuego \\
-            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implicaLuego \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implica \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
    
         \pred{todosElementos\_1\_o\_0}{matriz: \TLista{\TLista{\ent}}}{
-            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |matriz| \implicaLuego
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |matriz| \implica
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |matriz[i]| \implicaLuego (matriz[i][j] = 0 \lor matriz[i][j] = 1)}
            }
         }
@@ -360,13 +360,13 @@ endwhile
             esCaminoCorrecto(distancias, res, desde, hasta) \land
             (\paraTodo[unalinea]{i}{\TLista{\ent}}{ \\
 				esCaminoCorrecto(distancias, i, desde, hasta) 
-			\Rightarrow \\ 
-        	 distanciaTotal(distancias, res) <= distanciaTotal(distancias, i)})
+			\implica \\ 
+        	 distanciaTotal(distancias, res) \leq distanciaTotal(distancias, i)})
             )
         }
 
-        \aux{distanciaTotal}{distancias:  \TLista{\TLista{\ent}}, seq: \TLista{\ent}}{\ent}
-        {\sum\limits_{k=1}^{|distancias| - 1}{distancias[seq[k]][seq[k - 1]]}}
+        \aux{distanciaTotal}{distancias:  \TLista{\TLista{\ent}}, s: \TLista{\ent}}{\ent}
+        {\sum\limits_{k=1}^{|distancias| - 1}{distancias[s[k]][s[k - 1]]}}
 
         \pred{hayCaminoCorrecto}{distancias: \TLista{\TLista{\ent}}, desde: \ent, hasta: \ent}
         {\existe[unalinea]{i}{\TLista{\ent}}{esCaminoCorrecto(distancias, i, desde, hasta)}}

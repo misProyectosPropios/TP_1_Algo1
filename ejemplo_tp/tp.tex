@@ -130,19 +130,19 @@ endwhile
             sinRepetidos(res)
         }
 	    \asegura{ \\
-			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i.habitantes \geq 50.000)) \Rightarrow (i \in res) \land \\ 
-			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \Rightarrow ((j.habitantes \geq 50.000) \land j \in ciudades)} 
+			\paraTodo[unalinea]{i}{Ciudad}{((i \in ciudades) \land (i.habitantes \geq 50.000)) \implica (i \in res) \land \\ 
+			\paraTodo[unalinea]{j}{Ciudad}{(j \in res) \implica ((j.habitantes \geq 50.000) \land j \in ciudades)} 
 			}
         }
         %\left( \left( \forall i:Ciudad \right)\left( \left( \left( i\in ciudades \right)\wedge \left( i_{1}\ge 50.000 \right) \right)\to \left( i\in res \right) \right) \right) \wedge \left( \left( \forall j:Ciudad \right)\left( \left( j\in res \right)\to \left( \left( j_{1}\ge 50.000 \right)\wedge \left( j\in ciudades \right) \right) \right) \right)
 
 	    \pred{sonTodosPositivos}{ciudades: \TLista{Ciudad}}{
-			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow i.habitantes \geq 0}
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \implica i.habitantes \geq 0}
 		}
 
 		\pred{sinRepetidos}{ciudades: \TLista{Ciudad}}{ 
-			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \Rightarrow \neg(
-				\existe[unalinea]{j}{Ciudad}{j \in ciudades \land j.nombre = i.nombre}
+			\paraTodo[unalinea]{i}{Ciudad}{i \in ciudades \implica \neg(
+				\existe[unalinea]{j}{Ciudad}{j \neq i \land j \in ciudades \land j.nombre = i.nombre}
 			)}
 		}
     \end{proc}
@@ -249,7 +249,7 @@ endwhile
             \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implica \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}
    
         \pred{todosElementosPositivos}{s: \TLista{\TLista{\ent}}}{
-            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |s| \implica
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |s| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |s[i]| \implicaLuego s[i][j] \geq 0}
             }
         }
@@ -302,7 +302,7 @@ endwhile
             \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matriz| \implica \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matriz| \implicaLuego matriz[i][j] = matriz[j][i]}}}%\paraTodo{i}{\ent}{}}
    
         \pred{todosElementos\_1\_o\_0}{matriz: \TLista{\TLista{\ent}}}{
-            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |matriz| \implica
+            \paraTodo[unalinea]{i}{\ent}{ 0 \leq i < |matriz| \implicaLuego
                 \paraTodo[unalinea]{j}{\ent}{  0 \leq j < |matriz[i]| \implicaLuego (matriz[i][j] = 0 \lor matriz[i][j] = 1)}
            }
         }
@@ -319,7 +319,7 @@ endwhile
             esMatrizCuadrada(matrizMultiplicada) \land \\
             esMatrizCuadrada(res) \land \\
             |matrizAMultiplicar| =  |matrizMultiplicada| \land |res| = |matrizMultiplicada| \yLuego \\
-            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matrizAMultiplicar| \implica  \\
+            \paraTodo[unalinea]{i}{\ent}{0 \leq i < |matrizAMultiplicar| \implicaLuego  \\
                 \paraTodo[unalinea]{j}{\ent}{0 \leq j < |matrizAMultiplicar[i]| \implicaLuego \\
                 res[i][j] = productoEscalar(matrizAMultiplicar[i], matrizMultiplicada[j])
                 }
@@ -440,7 +440,7 @@ Para probar que el programa satisface la especificación, debo probar la tripla 
 
     O, usando los axiomas 
 
-    $$P \rightarrow wp(S1; wp(S2; wp(S3; wp(S4, Q))))$$
+    $$P \rightarrow wp(S1, wp(S2, wp(S3, wp(S4, Q))))$$
 
     donde  
     \begin{itemize}
@@ -470,7 +470,7 @@ Para probar que el programa satisface la especificación, debo probar la tripla 
 
     \begin{itemize}
         \item $B = \{i < |ciudades| \}$
-        \item $res =  \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
+        \item $Q_{c} \equiv res =  \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}$
     \end{itemize}
 
     Proponemos como invariante el siguiente predicado: 
@@ -487,7 +487,7 @@ Para probar que el programa satisface la especificación, debo probar la tripla 
         &\equiv i = |ciudades| \yLuego res = \sum\limits_{k=0}^{|ciudades| - 1}{ciudades[k].habitantes}
     \end{align*}
 
-    Quedando una expresión exactamente equivalente a $Q_{c}$. Como vale $Q_{c} \to Q_{c}$ (pues $A \to A$ es siempre verdadero), afirmamos que $(I \land \neg B) \to Q_{c}$ vale 
+    Quedando una expresión casi exactamente equivalente a $Q_{c}$. Como vale $Q_{c} \land i = |ciudades| \to Q_{c}$ (pues $A \land B \to A$ es siempre verdadero), afirmamos que $(I \land \neg B) \to Q_{c}$ vale 
 
 
     \begin{itemize}
@@ -553,7 +553,7 @@ Para probar que el programa satisface la especificación, debo probar la tripla 
     Ahora para probar que el ciclo termina, tenemos que probar:
 
     \begin{itemize}
-        \item $\{ I \land B \ f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$  
+        \item $\{ I \land B \land f_{v} = v_{0}  \}$ S $\{f_{v} < v_{0}\}$  
         \item $ I \land f_{v} \leq 0 \to \neg B$
     \end{itemize}
 
@@ -610,7 +610,7 @@ Para probar que el programa satisface la especificación, debo probar la tripla 
     \begin{align*}
         &\equiv def (res + ciudades[i].habitantes) \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res} \\
         &\equiv def(res) \land def(ciudades) \land def(i) \yLuego 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
-        &\equiv \True \land \True \land \True \land \yLuego 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
+        &\equiv \True \land \True \land \True \yLuego 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
         &\equiv 0 \leq i < |ciudades| \yLuego (|ciudades| - (i + 1) < v_{0})_{res + ciudades[i].habitantes}^{res}\\
         &\equiv 0 \leq i < |ciudades| \yLuego |ciudades| - (i + 1) < v_{0}
     \end{align*}
